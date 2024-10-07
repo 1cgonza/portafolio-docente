@@ -1,0 +1,21 @@
+@import './normalizar';
+
+:root {
+  --colorFuente: #252424;
+}
+
+#menu {
+  position: fixed;
+  width: 15vw;
+  background-color: rgb(221, 252, 253);
+  min-height: 100vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  width: 85vw;
+  position: absolute;
+  right: 0;
+}

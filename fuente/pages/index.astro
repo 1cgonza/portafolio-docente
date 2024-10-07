@@ -1,0 +1,26 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import type { Pagina } from '@/tipos';
+
+const paginas = await Astro.glob<Pagina>('../contenido/*.mdx');
+---
+
+<Plantilla>
+  <nav id="menu">
+    {paginas && paginas.map((pagina) => <a href={`#${pagina.frontmatter.slug}`}>{pagina.frontmatter.titulo}</a>)}
+  </nav>
+
+  <main>
+    {
+      paginas &&
+        paginas.map((pagina) => {
+          return (
+            <>
+              <h2 id={pagina.frontmatter.slug}>{pagina.frontmatter.titulo}</h2>
+              <pagina.Content />
+            </>
+          );
+        })
+    }
+  </main>
+</Plantilla>
