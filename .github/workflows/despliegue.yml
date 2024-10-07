@@ -1,35 +1,60 @@
-name: Despliegue
+name: 🐘 Despliegue
 
 on:
   push:
-    branches: [main]
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+env:
+  BUILD_PATH: './aplicaciones/www'
 
 jobs:
   build:
-    name: 🐘 Desplegar
+    name: 🐩 Exportar página
     runs-on: ubuntu-latest
-
     steps:
       - name: 🐯 Obtener código del repositorio
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: 🐝 Usar Node
-        uses: actions/setup-node@v3
+      - name: 🐜 Activar Corepack
+        run: corepack enable
+      - name: 🐝 Usar Node LTS
+        uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-
-      - name: 🦒 Instalar dependencias y hacer build
+          cache: 'yarn'
+      - name: 🐾 Configurar página de GitHub
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: 🦒 Instalar dependencias
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable
+      - name: 🦍 Transpilar sitio
+        run: |
           yarn build
-      - name: 🦅 Enviar por SFTP
-        uses: wangyucode/sftp-upload-action@v2.0.2
+      - name: 🐉 Subir archivos
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
-          host: ${{ secrets.DOMINIO_IMAGINA }}
-          username: ${{ secrets.USUARIO_IMAGINA }}
-          password: ${{ secrets.CLAVE_IMAGINA }}
-          localDir: 'aplicaciones/www/publico'
-          remoteDir: '/srv/www/wordpress/especiales/siya/'
-          removeExtraFilesOnServer: true
+          path: /publico
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: 🦦 Despliegue
+    steps:
+      - name: 🐄 Desplegando en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
