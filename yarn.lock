@@ -1265,7 +1265,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mdast@npm:^4.0.0":
+"@types/mdast@npm:^4.0.0, @types/mdast@npm:^4.0.4":
   version: 4.0.4
   resolution: "@types/mdast@npm:4.0.4"
   dependencies:
@@ -2119,6 +2119,7 @@ __metadata:
   dependencies:
     "@astrojs/check": "npm:^0.9.4"
     "@astrojs/mdx": "npm:^3.1.7"
+    "@types/mdast": "npm:^4.0.4"
     "@types/slug": "npm:^5.0.9"
     astro: "npm:^4.15.12"
     prettier: "npm:^3.3.3"

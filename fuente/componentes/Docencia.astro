@@ -1,10 +1,6 @@
 ---
 import type { Pagina } from '@/tipos';
-import type { MDXInstance } from 'astro';
-async function aplanarPagina(pagina: Promise<MDXInstance<Pagina>[]>) {
-  return await pagina.then((res) => res[0]);
-}
-const pregrado = await Astro.glob<Pagina>('../contenido/docencia/pregrado/*.mdx');
+
 const paginas = await Astro.glob<Pagina>('../contenido/docencia/*.mdx');
 ---
 
@@ -18,17 +14,4 @@ const paginas = await Astro.glob<Pagina>('../contenido/docencia/*.mdx');
         </>
       );
     })
-}
-
-<h3>Cursos</h3>
-
-<h4>Cursos de pregrado</h4>
-
-{
-  pregrado.map((pagina) => (
-    <>
-      <h5>{pagina.frontmatter.titulo}</h5>
-      <pagina.Content />
-    </>
-  ))
 }

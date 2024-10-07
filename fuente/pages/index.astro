@@ -3,11 +3,30 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 import type { Pagina } from '@/tipos';
 
 const paginas = await Astro.glob<Pagina>('../contenido/*.mdx');
+const paginasDocencia = await Astro.glob<Pagina>('../contenido/docencia/*.mdx');
 ---
 
 <Plantilla>
   <nav id="menu">
-    {paginas && paginas.map((pagina) => <a href={`#${pagina.frontmatter.slug}`}>{pagina.frontmatter.titulo}</a>)}
+    <ul>
+      {
+        paginas &&
+          paginas.map((pagina) => (
+            <li>
+              <a href={`#${pagina.frontmatter.slug}`}>{pagina.frontmatter.titulo}</a>
+              {pagina.frontmatter.slug === 'docencia' && (
+                <ul>
+                  {paginasDocencia.map((pDocencia) => (
+                    <li>
+                      <a href={`#${pDocencia.frontmatter.slug}`}>{pDocencia.frontmatter.titulo}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+      }
+    </ul>
   </nav>
 
   <main>

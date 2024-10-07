@@ -1,0 +1,27 @@
+---
+import type { Pagina } from '@/tipos';
+import type { MDXInstance } from 'astro';
+
+interface Props {
+  nivel: 'pregrado' | 'maestria';
+}
+
+const { nivel } = Astro.props;
+let cursos: MDXInstance<Pagina>[] | null = null;
+
+if (nivel === 'pregrado') {
+  cursos = await Astro.glob<Pagina>('../contenido/docencia/pregrado/*.mdx');
+} else if (nivel === 'maestria') {
+  cursos = await Astro.glob<Pagina>('../contenido/docencia/maestria/*.mdx');
+}
+---
+
+{
+  cursos &&
+    cursos.map((pagina) => (
+      <>
+        <h4 id={`${nivel}-${pagina.frontmatter.slug}`}>{pagina.frontmatter.titulo}</h4>
+        <pagina.Content />
+      </>
+    ))
+}
