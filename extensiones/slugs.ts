@@ -9,7 +9,7 @@ interface Archivo {
 }
 
 export function crearSlugs() {
-  return function (arbol: Root, archivo: Archivo) {
+  return function (_: Root, archivo: Archivo) {
     archivo.data.astro.frontmatter.slug = slugificar(archivo.data.astro.frontmatter.titulo);
   };
 }
