@@ -45,7 +45,7 @@ jobs:
       - name: 🐉 Subir archivos
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          path: /publico
+          path: ./publico
 
   deploy:
     environment:
