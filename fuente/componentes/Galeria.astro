@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+
+type ListaImagenes = Record<string, () => Promise<{ default: ImageMetadata }>>;
+
+interface Props {
+  lista: ListaImagenes;
+}
+
+const { lista } = Astro.props;
+const imgs = await Promise.all(Object.values(lista).map((imagen) => imagen().then((obj) => obj.default)));
+---
+
+{
+  imgs && (
+    <div class="galeria">
+      {imgs.map((img) => (
+        <a href={img.src} data-pswp-width={img.width} data-pswp-height={img.height} target="_blank">
+          <Image src={img} alt={`Imagen`} format="webp" height={200} quality={60} loading={'lazy'} />
+        </a>
+      ))}
+    </div>
+  )
+}

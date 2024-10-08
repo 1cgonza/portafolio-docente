@@ -30,6 +30,11 @@ const paginasDocencia = await Astro.glob<Pagina>('../contenido/docencia/*.mdx');
   </nav>
 
   <main>
+    <header>
+      <h1>Portafolio Docente, Juan Camilo González Jiménez</h1>
+      <p>2024</p>
+    </header>
+
     {
       paginas &&
         paginas.map((pagina) => {

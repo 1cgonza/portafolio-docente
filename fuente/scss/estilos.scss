@@ -4,18 +4,72 @@
   --colorFuente: #252424;
 }
 
+::selection {
+  background-color: rgb(219, 247, 192);
+}
+
 #menu {
   position: fixed;
-  width: 15vw;
-  background-color: rgb(221, 252, 253);
+  width: 15%;
+  background-color: rgb(245, 248, 238);
   min-height: 100vh;
   overflow: auto;
   display: flex;
   flex-direction: column;
+  padding: 1em;
+  font-size: 0.85em;
+
+  li {
+    line-height: 1.2;
+    margin: 0.5em 0;
+  }
+
+  a,
+  a:link {
+    color: rgb(167, 27, 180);
+    transition: color 0.35s ease-out;
+
+    &:hover {
+      color: rgb(42, 17, 44);
+    }
+  }
 }
 
 main {
-  width: 85vw;
+  width: 85%;
   position: absolute;
   right: 0;
+  padding: 1em 3em 5em 3em;
+
+  li {
+    margin-bottom: 0.8em;
+  }
+}
+
+header {
+  text-align: right;
+  width: 470px;
+  margin: 0 0 0 auto;
+}
+
+span {
+  &.maestria {
+    background-color: rgb(159, 211, 253);
+    padding: 0.2em;
+  }
+
+  &.pregrado {
+    background-color: rgb(238, 197, 174);
+    padding: 0.2em;
+  }
+
+  &.jurado {
+    background-color: rgb(179, 221, 186);
+    padding: 0.2em;
+  }
+
+  &.asesor {
+    background-color: rgb(245, 238, 147);
+    padding: 0.2em;
+  }
 }

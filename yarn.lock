@@ -1297,6 +1297,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/photoswipe@npm:^4.1.6":
+  version: 4.1.6
+  resolution: "@types/photoswipe@npm:4.1.6"
+  checksum: 10c0/c591d029acb459de2a8db4647fb51eac4c2d831565906af2da1747b3b5d8b15c9f65fbcd163547feba388f6c85b590ec7c24bbef596d9f90b14fcfb145f7150d
+  languageName: node
+  linkType: hard
+
 "@types/slug@npm:^5.0.9":
   version: 5.0.9
   resolution: "@types/slug@npm:5.0.9"
@@ -2120,8 +2127,10 @@ __metadata:
     "@astrojs/check": "npm:^0.9.4"
     "@astrojs/mdx": "npm:^3.1.7"
     "@types/mdast": "npm:^4.0.4"
+    "@types/photoswipe": "npm:^4.1.6"
     "@types/slug": "npm:^5.0.9"
     astro: "npm:^4.15.12"
+    photoswipe: "npm:^5.4.4"
     prettier: "npm:^3.3.3"
     prettier-plugin-astro: "npm:^0.14.1"
     sass: "npm:^1.79.4"
@@ -4318,6 +4327,13 @@ __metadata:
     estree-walker: "npm:^3.0.0"
     is-reference: "npm:^3.0.0"
   checksum: 10c0/fb5ce7cd810c49254cdf1cd3892811e6dd1a1dfbdf5f10a0a33fb7141baac36443c4cad4f0e2b30abd4eac613f6ab845c2bc1b7ce66ae9694c7321e6ada5bd96
+  languageName: node
+  linkType: hard
+
+"photoswipe@npm:^5.4.4":
+  version: 5.4.4
+  resolution: "photoswipe@npm:5.4.4"
+  checksum: 10c0/9a62a8ee4b87564f3d2067edfd7f168d07973e1e37b21cd4f548363b441d8192991a88d272a0f299de0e7c773e6c74367ebcf895f0e60ca919d52e1d2f3b0355
   languageName: node
   linkType: hard
 

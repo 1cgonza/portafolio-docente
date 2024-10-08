@@ -59,6 +59,19 @@ const altImg = imagen ? imagen.alt : nombreProyecto;
   </body>
 </html>
 
+<script>
+  import 'photoswipe/style.css';
+  import pswpModule from 'photoswipe';
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+  const galerias = new PhotoSwipeLightbox({
+    pswpModule,
+    children: 'a',
+    gallery: '.galeria',
+  });
+  galerias.init();
+</script>
+
 <style lang="scss" is:global>
   @import '@/scss/estilos.scss';
 </style>
