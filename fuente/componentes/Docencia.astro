@@ -1,16 +1,17 @@
 ---
-import type { Pagina } from '@/tipos';
+import { getCollection, render } from 'astro:content';
 
-const paginas = await Astro.glob<Pagina>('../contenido/docencia/*.mdx');
+const paginas = await getCollection('paginasDocencia').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
 ---
 
 {
   paginas &&
-    paginas.map((pagina) => {
+    paginas.map(async (pagina) => {
+      const { Content } = await render(pagina);
       return (
         <>
-          <h3 id={pagina.frontmatter.slug}>{pagina.frontmatter.titulo}</h3>
-          <pagina.Content />
+          <h3 id={pagina.id}>{pagina.data.titulo}</h3>
+          <Content />
         </>
       );
     })

@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+interface Proyecto {
+  id: string;
+  data: {
+    año: number;
+    estudiantes: string[];
+    titulo: string;
+    programa: string;
+    tipo: string;
+    nivel: string;
+  };
+}
+
+interface ProyectosPorAño {
+  [año: string]: Proyecto[];
+}
+
+const proyectos = await getCollection('proyectosGrado').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
+
+const proyectosPorAño = proyectos.reduce((acc, proyecto) => {
+  const año = proyecto.data.año;
+  if (!año) {
+    console.warn(`Proyecto sin año definido: ${proyecto.id}`);
+    return acc;
+  }
+  if (!acc[año]) {
+    acc[año] = [];
+  }
+  acc[año].push(proyecto);
+  return acc;
+}, {} as ProyectosPorAño);
+
+function crearSlug(titulo: string): string {
+  return titulo
+    .normalize('NFD') // Descomponer caracteres acentuados
+    .replace(/[\u0300-\u036f]/g, '') // Eliminar marcas diacríticas (tildes)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '') // Eliminar caracteres especiales
+    .replace(/\s+/g, '-') // Reemplazar espacios por guiones
+    .trim(); // Eliminar espacios al inicio y al final
+}
+---
+
+{
+  Object.entries(proyectosPorAño).map(([año, proyectos]) => (
+    <section class="proyectosGrado">
+      <h4>{año}</h4>
+      <ul>
+        {proyectos.map((proyecto) => {
+          return (
+            <li>
+              <span class={crearSlug(proyecto.data.nivel)}>{proyecto.data.nivel}</span>
+              <span class={crearSlug(proyecto.data.tipo)}>{proyecto.data.tipo} </span>{' '}
+              <span class="año">{proyecto.data.año}</span> - <span class="titulo">"{proyecto.data.titulo}"</span> por{' '}
+              {proyecto.data.estudiantes.map((estudiante, index) => (
+                <span>
+                  {estudiante}
+                  {index < proyecto.data.estudiantes.length - 1 ? ', ' : ''}
+                </span>
+              ))}{' '}
+              - {proyecto.data.programa}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))
+}

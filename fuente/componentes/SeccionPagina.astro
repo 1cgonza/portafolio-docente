@@ -1,15 +1,14 @@
 ---
-import type { Pagina } from '@/tipos';
-import type { MDXInstance } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  pagina: MDXInstance<Pagina>;
+  pagina: CollectionEntry<'paginas'>;
 }
 
 const { pagina } = Astro.props;
 ---
 
 <section>
-  <h2 id={pagina.frontmatter.slug}>{pagina.frontmatter.titulo}</h2>
-  <pagina.Content />
+  <h2 id={pagina.id}>{pagina.data.titulo}</h2>
+  <slot />
 </section>

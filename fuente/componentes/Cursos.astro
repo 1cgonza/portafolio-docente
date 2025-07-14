@@ -1,27 +1,29 @@
 ---
-import type { Pagina } from '@/tipos';
-import type { MDXInstance } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 interface Props {
   nivel: 'pregrado' | 'maestria';
 }
 
 const { nivel } = Astro.props;
-let cursos: MDXInstance<Pagina>[] | null = null;
+let cursos: CollectionEntry<'cursosPregrado' | 'cursosMaestria'>[] | null = null;
 
 if (nivel === 'pregrado') {
-  cursos = await Astro.glob<Pagina>('../contenido/docencia/pregrado/*.mdx');
+  cursos = await getCollection('cursosPregrado').then((c) => c.sort((a, b) => a.id.localeCompare(b.id)));
 } else if (nivel === 'maestria') {
-  cursos = await Astro.glob<Pagina>('../contenido/docencia/maestria/*.mdx');
+  cursos = await getCollection('cursosMaestria').then((c) => c.sort((a, b) => a.id.localeCompare(b.id)));
 }
 ---
 
 {
   cursos &&
-    cursos.map((pagina) => (
-      <>
-        <h4 id={`${nivel}-${pagina.frontmatter.slug}`}>{pagina.frontmatter.titulo}</h4>
-        <pagina.Content />
-      </>
-    ))
+    cursos.map(async (pagina) => {
+      const { Content } = await render(pagina);
+      return (
+        <>
+          <h4 id={`${nivel}-${pagina.id}`}>{pagina.data.titulo}</h4>
+          <Content />
+        </>
+      );
+    })
 }
