@@ -1,35 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
-interface Proyecto {
-  id: string;
-  data: {
-    año: number;
-    estudiantes: string[];
-    titulo: string;
-    programa: string;
-    tipo: string;
-    nivel: string;
-  };
-}
-
-interface ProyectosPorAño {
-  [año: string]: Proyecto[];
-}
+import { getCollection, render } from 'astro:content';
 
 const proyectos = await getCollection('proyectosGrado').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
 
-const proyectosPorAño = proyectos.reduce((acc, proyecto) => {
-  const año = proyecto.data.año;
-  if (!año) {
-    console.warn(`Proyecto sin año definido: ${proyecto.id}`);
+const proyectosPorAño = proyectos.reduce(
+  (acc, proyecto) => {
+    const año = proyecto.data.año;
+    if (!año) {
+      console.warn(`Proyecto sin año definido: ${proyecto.id}`);
+      return acc;
+    }
+    if (!acc[año]) {
+      acc[año] = [];
+    }
+    acc[año].push(proyecto);
     return acc;
-  }
-  if (!acc[año]) {
-    acc[año] = [];
-  }
-  acc[año].push(proyecto);
-  return acc;
-}, {} as ProyectosPorAño);
+  },
+  {} as Record<string, typeof proyectos>
+);
 
 function crearSlug(titulo: string): string {
   return titulo
@@ -43,11 +31,12 @@ function crearSlug(titulo: string): string {
 ---
 
 {
-  Object.entries(proyectosPorAño).map(([año, proyectos]) => (
+  Object.entries(proyectosPorAño).map(async ([año, proyectos]) => (
     <section class="proyectosGrado">
       <h4>{año}</h4>
       <ul>
-        {proyectos.map((proyecto) => {
+        {proyectos.map(async (proyecto) => {
+          const { Content } = await render(proyecto);
           return (
             <li>
               <span class={crearSlug(proyecto.data.nivel)}>{proyecto.data.nivel}</span>
@@ -60,6 +49,9 @@ function crearSlug(titulo: string): string {
                 </span>
               ))}{' '}
               - {proyecto.data.programa}
+              <div class="notaProyecto">
+                <Content />
+              </div>
             </li>
           );
         })}
