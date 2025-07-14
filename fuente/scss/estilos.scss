@@ -1,4 +1,4 @@
-@import './normalizar';
+@use './normalizar' as *;
 
 :root {
   --colorFuente: #252424;
@@ -52,24 +52,29 @@ header {
   margin: 0 0 0 auto;
 }
 
-span {
-  &.maestria {
-    background-color: rgb(159, 211, 253);
-    padding: 0.2em;
+.proyectosGrado {
+  .titulo {
+    font-weight: bold;
+    font-style: italic;
   }
+}
 
-  &.pregrado {
-    background-color: rgb(238, 197, 174);
-    padding: 0.2em;
-  }
+span.maestria {
+  background-color: rgb(159, 211, 253);
+  padding: 0.2em;
+}
 
-  &.jurado {
-    background-color: rgb(179, 221, 186);
-    padding: 0.2em;
-  }
+span.pregrado {
+  background-color: rgb(238, 197, 174);
+  padding: 0.2em;
+}
 
-  &.asesor {
-    background-color: rgb(245, 238, 147);
-    padding: 0.2em;
-  }
+span.jurado {
+  background-color: rgb(179, 221, 186);
+  padding: 0.2em;
+}
+
+span.asesor {
+  background-color: rgb(245, 238, 147);
+  padding: 0.2em;
 }

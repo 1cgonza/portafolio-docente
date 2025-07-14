@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import { crearSlugs } from './extensiones/slugs';
 
 export default defineConfig({
   publicDir: './estaticos',
@@ -25,7 +24,5 @@ export default defineConfig({
   },
 
   integrations: [mdx()],
-  markdown: {
-    remarkPlugins: [crearSlugs],
-  },
+  markdown: {},
 });

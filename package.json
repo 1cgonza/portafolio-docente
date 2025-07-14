@@ -1,6 +1,6 @@
 {
-  "name": "enflujo-plantilla-astro",
-  "packageManager": "yarn@4.5.0",
+  "name": "portafolio-docente",
+  "packageManager": "yarn@4.9.2",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -15,18 +15,18 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^3.1.7",
-    "astro": "^4.15.12",
+    "@astrojs/mdx": "^4.3.0",
+    "astro": "^5.11.1",
     "photoswipe": "^5.4.4",
-    "typescript": "^5.6.2"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
     "@types/photoswipe": "^4.1.6",
     "@types/slug": "^5.0.9",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
-    "sass": "^1.79.4",
-    "slug": "^9.1.0"
+    "sass": "^1.89.2",
+    "slug": "^11.0.0"
   }
 }
