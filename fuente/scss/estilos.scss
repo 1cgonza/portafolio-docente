@@ -58,6 +58,10 @@ header {
     font-style: italic;
   }
 
+  .nombre {
+    font-weight: bold;
+  }
+
   .notaProyecto {
     color: rgb(100, 100, 100);
     margin: -0.8em 0 0 200px;
@@ -85,5 +89,10 @@ span.jurado {
 
 span.asesor {
   background-color: rgb(245, 238, 147);
+  padding: 0.2em;
+}
+
+span.opcion-de-grado {
+  background-color: rgb(255, 224, 153);
   padding: 0.2em;
 }

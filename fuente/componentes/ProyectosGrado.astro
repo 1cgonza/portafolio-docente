@@ -2,6 +2,9 @@
 import { getCollection, render } from 'astro:content';
 
 const proyectos = await getCollection('proyectosGrado').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
+const asistencias = await getCollection('asistentesInvestigacion').then((p) =>
+  p.sort((a, b) => a.id.localeCompare(b.id))
+);
 
 const proyectosPorAño = proyectos.reduce(
   (acc, proyecto) => {
@@ -17,6 +20,22 @@ const proyectosPorAño = proyectos.reduce(
     return acc;
   },
   {} as Record<string, typeof proyectos>
+);
+
+const asistenciasPorAño = asistencias.reduce(
+  (acc, asistencia) => {
+    const año = asistencia.data.año;
+    if (!año) {
+      console.warn(`Asistencia sin año definido: ${asistencia.id}`);
+      return acc;
+    }
+    if (!acc[año]) {
+      acc[año] = [];
+    }
+    acc[año].push(asistencia);
+    return acc;
+  },
+  {} as Record<string, typeof asistencias>
 );
 
 function crearSlug(titulo: string): string {
@@ -59,3 +78,30 @@ function crearSlug(titulo: string): string {
     </section>
   ))
 }
+
+<h3>Asistentes de Investigación</h3>
+
+<p>
+  Los estudiantes a continuación han participado como asistentes de investigación en el Laboratorio EnFlujo como su
+  opción de grado.
+</p>
+
+<ul class="proyectosGrado">
+  {
+    Object.entries(asistenciasPorAño).map(async ([_, asistencias]) =>
+      asistencias.map(async (asistencia) => {
+        const { Content } = await render(asistencia);
+        return (
+          <li>
+            <span class={crearSlug(asistencia.data.nivel)}>{asistencia.data.nivel}</span>
+            <span class={crearSlug(asistencia.data.tipo)}>{asistencia.data.tipo}</span>{' '}
+            <span class="año">{asistencia.data.año}</span> - <span class="nombre">{asistencia.data.nombre}</span>
+            <div class="notaAsistencia">
+              <Content />
+            </div>
+          </li>
+        );
+      })
+    )
+  }
+</ul>

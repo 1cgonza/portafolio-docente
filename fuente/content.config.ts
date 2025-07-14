@@ -52,4 +52,23 @@ const proyectosGrado = defineCollection({
     }),
 });
 
-export const collections = { paginas, paginasDocencia, cursosPregrado, cursosMaestria, proyectosGrado };
+const asistentesInvestigacion = defineCollection({
+  loader: glob({ pattern: '*.{md,mdx}', base: './fuente/contenido/docencia/asistencia_investigacion' }),
+  schema: () =>
+    z.object({
+      nombre: z.string(),
+      nivel: z.string(),
+      programa: z.string(),
+      tipo: z.string(),
+      año: z.number(),
+    }),
+});
+
+export const collections = {
+  paginas,
+  paginasDocencia,
+  cursosPregrado,
+  cursosMaestria,
+  proyectosGrado,
+  asistentesInvestigacion,
+};
