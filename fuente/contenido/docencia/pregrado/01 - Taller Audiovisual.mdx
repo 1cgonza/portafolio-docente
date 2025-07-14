@@ -2,7 +2,7 @@
 titulo: 'Taller Audiovisual'
 ---
 
-import Galeria from '../../../componentes/Galeria.astro';
+import Galeria from '@/componentes/Galeria.astro';
 
 La dicté en los periodos: 2019-2, 2020-1, 2020-2, 2021-1
 
@@ -14,4 +14,4 @@ Este es un curso que diseñe y le he hecho seguimiento como coordinador del Area
   Taller Audiovisual (PDF)
 </a>
 
-<Galeria lista={import.meta.glob('./programa-taller-audiovisual/*.jpg')} />
+<Galeria carpeta="programa-taller-audiovisual" />
