@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Galeria from '@/componentes/Galeria.astro';
 
 interface Props {
   nivel: 'pregrado' | 'maestria';
@@ -22,7 +23,13 @@ if (nivel === 'pregrado') {
       return (
         <>
           <h4 id={`${nivel}-${pagina.id}`}>{pagina.data.titulo}</h4>
+          <p>La dicté en los periodos: {pagina.data.ciclos.join(', ')}</p>
           <Content />
+          <h5>Programa</h5>
+          <a href={`/pdfs/${pagina.data.programaPDF}`} target="_blank">
+            {pagina.data.titulo} (PDF)
+          </a>
+          <Galeria carpeta={pagina.data.carpetaPrograma || `programa-${pagina.id}`} />
         </>
       );
     })

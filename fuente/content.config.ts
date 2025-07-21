@@ -26,6 +26,9 @@ const cursosPregrado = defineCollection({
       titulo: z.string(),
       nivel: z.string().optional(),
       nuevo: z.boolean().optional(),
+      programaPDF: z.string(),
+      carpetaPrograma: z.string().optional(),
+      ciclos: z.array(z.string()),
     }),
 });
 
@@ -36,6 +39,9 @@ const cursosMaestria = defineCollection({
       titulo: z.string(),
       nivel: z.string().optional(),
       nuevo: z.boolean().optional(),
+      programaPDF: z.string(),
+      carpetaPrograma: z.string().optional(),
+      ciclos: z.array(z.string()),
     }),
 });
 
