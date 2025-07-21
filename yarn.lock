@@ -71,9 +71,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/markdown-remark@npm:6.3.2":
-  version: 6.3.2
-  resolution: "@astrojs/markdown-remark@npm:6.3.2"
+"@astrojs/markdown-remark@npm:6.3.3":
+  version: 6.3.3
+  resolution: "@astrojs/markdown-remark@npm:6.3.3"
   dependencies:
     "@astrojs/internal-helpers": "npm:0.6.1"
     "@astrojs/prism": "npm:3.3.0"
@@ -90,21 +90,21 @@ __metadata:
     remark-rehype: "npm:^11.1.2"
     remark-smartypants: "npm:^3.0.2"
     shiki: "npm:^3.2.1"
-    smol-toml: "npm:^1.3.1"
+    smol-toml: "npm:^1.3.4"
     unified: "npm:^11.0.5"
     unist-util-remove-position: "npm:^5.0.0"
     unist-util-visit: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.1"
     vfile: "npm:^6.0.3"
-  checksum: 10c0/e4e9926286def70548505d49333c0b80624e36dad035d0b943ef4d56211530784a8317f92277c702b6a47b68dea0f9afd154aacf2c6b8361177a51ac3c8b20bc
+  checksum: 10c0/0df9cabe2da0547d9aec0267339b5ecbcb64f95f4a2d365484d2262eda0e140bf8229f9d65e4bdcb5607a8d20c91f81583bba657733c0e1c1257ee58bbcc51cd
   languageName: node
   linkType: hard
 
-"@astrojs/mdx@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "@astrojs/mdx@npm:4.3.0"
+"@astrojs/mdx@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "@astrojs/mdx@npm:4.3.1"
   dependencies:
-    "@astrojs/markdown-remark": "npm:6.3.2"
+    "@astrojs/markdown-remark": "npm:6.3.3"
     "@mdx-js/mdx": "npm:^3.1.0"
     acorn: "npm:^8.14.1"
     es-module-lexer: "npm:^1.6.0"
@@ -119,7 +119,7 @@ __metadata:
     vfile: "npm:^6.0.3"
   peerDependencies:
     astro: ^5.0.0
-  checksum: 10c0/26af7eef30e7f89f30ab89971d8b320678788a4a56f9e8a22e5b5eb1885c105dd1c0e5fe94c564a44a87e293bdb1a1b666f1f04004afcbfb3b53b462a759a9ef
+  checksum: 10c0/0a7e4a33605d00414aa86ac8dc0b2ac79b20b40353097903d1ee25a35d5977ee0bc2c1be6dc61ef21a50362d01772a4bf4fa1b7960d4670bb282c59b802ac3b3
   languageName: node
   linkType: hard
 
@@ -1461,13 +1461,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^5.11.1":
-  version: 5.11.1
-  resolution: "astro@npm:5.11.1"
+"astro@npm:^5.12.1":
+  version: 5.12.1
+  resolution: "astro@npm:5.12.1"
   dependencies:
     "@astrojs/compiler": "npm:^2.12.2"
     "@astrojs/internal-helpers": "npm:0.6.1"
-    "@astrojs/markdown-remark": "npm:6.3.2"
+    "@astrojs/markdown-remark": "npm:6.3.3"
     "@astrojs/telemetry": "npm:3.3.0"
     "@capsizecss/unpack": "npm:^2.4.0"
     "@oslojs/encoding": "npm:^1.1.0"
@@ -1511,6 +1511,7 @@ __metadata:
     semver: "npm:^7.7.1"
     sharp: "npm:^0.33.3"
     shiki: "npm:^3.2.1"
+    smol-toml: "npm:^1.3.4"
     tinyexec: "npm:^0.3.2"
     tinyglobby: "npm:^0.2.12"
     tsconfck: "npm:^3.1.5"
@@ -1532,7 +1533,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10c0/988904ad77a848c9814e7abeeaea38013d096cf9d9f1c08878054e562ca37e6654df7182b8b58b7ec2a48141e64842f3d1dc3322ccc30a2b6d2624bde15da1b4
+  checksum: 10c0/59ea923da03325a67b3d64a797255c50d2d666d93c4e56a718a6235b784a13c1390c9cf7459a6b3591e1eacbc7cbcfd4541d4bbf924badf3b8071c982ad61464
   languageName: node
   linkType: hard
 
@@ -4111,11 +4112,11 @@ __metadata:
   resolution: "portafolio-docente@workspace:."
   dependencies:
     "@astrojs/check": "npm:^0.9.4"
-    "@astrojs/mdx": "npm:^4.3.0"
+    "@astrojs/mdx": "npm:^4.3.1"
     "@types/mdast": "npm:^4.0.4"
     "@types/photoswipe": "npm:^4.1.6"
     "@types/slug": "npm:^5.0.9"
-    astro: "npm:^5.11.1"
+    astro: "npm:^5.12.1"
     photoswipe: "npm:^5.4.4"
     prettier: "npm:^3.6.2"
     prettier-plugin-astro: "npm:^0.14.1"
@@ -4802,7 +4803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smol-toml@npm:^1.3.1":
+"smol-toml@npm:^1.3.4":
   version: 1.4.1
   resolution: "smol-toml@npm:1.4.1"
   checksum: 10c0/0589866e6949a1d6db92e67af57b4c8a1b284e19e215cda2a0e88f43ab91677d077724fad39ff5e6a0912150c743f5f4e560da675d565348ee8c65417096b0af
