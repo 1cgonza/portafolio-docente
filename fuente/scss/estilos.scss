@@ -5,13 +5,13 @@
 }
 
 ::selection {
-  background-color: rgb(219, 247, 192);
+  background-color: rgb(247, 192, 234);
 }
 
 #menu {
   position: fixed;
   width: 15%;
-  background-color: rgb(245, 248, 238);
+  background-color: rgb(27, 27, 27);
   min-height: 100vh;
   overflow: auto;
   display: flex;
@@ -26,11 +26,11 @@
 
   a,
   a:link {
-    color: rgb(167, 27, 180);
+    color: rgb(226, 166, 231);
     transition: color 0.35s ease-out;
 
     &:hover {
-      color: rgb(42, 17, 44);
+      color: rgb(222, 63, 234);
     }
   }
 }
