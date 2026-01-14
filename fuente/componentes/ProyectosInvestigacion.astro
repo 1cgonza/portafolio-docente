@@ -1,0 +1,178 @@
+---
+export const apiBase = 'https://api.enflujo.com';
+export const apiGraqhql = `${apiBase}/graphql`;
+const gql = String.raw;
+
+type Imagen = { id: string; title: string };
+
+interface CamposComunes {
+  estado: string;
+  titulo: string;
+  slug: string;
+  contenido: string;
+  // SEO
+  descripcion: string;
+  imagen: Imagen;
+}
+
+interface Proyecto extends CamposComunes {
+  id: number;
+  user_created?: string | Date;
+  fecha_inicio: string | Date;
+  fecha_publicacion: string | Date;
+  date_created?: string | Date;
+  enlace: string;
+  terminado?: boolean;
+  colegas?: { colegas_id: { nombre: string; enlace?: string } }[];
+}
+
+interface OpcionesImagenDirectus {
+  fit?: 'contain' | 'cover' | 'inside' | 'outside';
+  width: number;
+  height: number;
+  quality?: number;
+  withoutEnlargement?: boolean;
+  format?: 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif';
+  transforms?: any[];
+}
+
+const dimsImg = { ancho: '630', alto: '350' };
+
+async function obtenerDatos<Esquema>(query: string, sistema = false) {
+  const peticion = await fetch(`${apiBase}/graphql${sistema ? '/system' : ''}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query }),
+  }).then((res) => res.json());
+
+  if (peticion.errors) {
+    throw new Error(JSON.stringify(peticion.errors, null, 2));
+  }
+
+  return peticion.data as Esquema;
+}
+
+const Proyectos = gql`
+  query {
+    proyectos(filter: { estado: { _eq: "publicado" } }, sort: ["-date_created"]) {
+      titulo
+      slug
+      descripcion
+      fecha_publicacion
+      date_created
+      fecha_inicio
+      enlace
+      temas {
+        glosario_id(filter: { estado: { _eq: "publicado" } }) {
+          titulo
+        }
+      }
+      imagen {
+        id
+        title
+      }
+    }
+  }
+`;
+
+const { proyectos } = await obtenerDatos<{ proyectos: Proyecto[]; paginas: CamposComunes[] }>(Proyectos);
+proyectos.sort((a, b) => {
+  const fechaA = a.fecha_publicacion || a.fecha_inicio || a.date_created;
+  const fechaB = b.fecha_publicacion || b.fecha_inicio || b.date_created;
+
+  if (fechaA && fechaB) {
+    return new Date(fechaB).getTime() - new Date(fechaA).getTime();
+  }
+
+  return 0;
+});
+
+const urlImagen = (id: string, llaveUObjeto: OpcionesImagenDirectus | string) => {
+  if (!id) {
+    throw new Error(`Se tiene que usar un ID del archivo pero ahora el parámetro es ${JSON.stringify(id)}`);
+  }
+
+  // Desde Directus se pueden crear configuraciones predeterminadas para pedir imágenes en diferentes formatos usando un "key"
+  // Si se usa un key, podemos devolver este endpoint sencillo
+  if (typeof llaveUObjeto === 'string') {
+    return `${apiBase}/assets/${id}?key=${llaveUObjeto}`;
+  }
+
+  // Si no se usa un key sino que se pasan las opciones manualmente en un objeto, debemos construir la URL con sus parámetros.
+  const parametros: [llave: string, valor: string][] = [];
+
+  for (const llave in llaveUObjeto) {
+    parametros.push([llave, `${llaveUObjeto[llave as keyof OpcionesImagenDirectus]}`]);
+  }
+  const query = new URLSearchParams(parametros).toString();
+  return `${apiBase}/assets/${id}?${query}`;
+};
+---
+
+<div class="contenedorTarjetas">
+  {proyectos.map((proyecto: Proyecto) => (
+    <h3>{proyecto.titulo}</h3>
+    <div class="contenedorImg">
+      {
+        proyecto.imagen ? (
+          <img
+            class="perezoso"
+            src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+            data-fuente={urlImagen(proyecto.imagen.id, {
+              width: 667,
+              height: 350,
+              quality: 90,
+              format: 'webp',
+            })}
+            alt={proyecto.imagen.title}
+            width={dimsImg.ancho}
+            height={dimsImg.alto}
+          />
+        ) : (
+          <img
+            src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+            alt={proyecto.titulo}
+            width={dimsImg.ancho}
+            height={dimsImg.alto}
+          />
+        )
+      }
+  </div>
+  ))}
+  
+</div>
+
+<script>
+  const duranteInterseccion = (
+  elemento: HTMLElement,
+  accion: (elemento: Element) => void,
+  desconectarInmediatamente = true,
+  opciones: IntersectionObserverInit
+) => {
+  const observador = new IntersectionObserver(([elementoObservado]) => {
+    if (elementoObservado && elementoObservado.isIntersecting) {
+      accion(elementoObservado.target);
+
+      if (desconectarInmediatamente) {
+        observador.unobserve(elementoObservado.target);
+      }
+    }
+  }, opciones);
+
+  observador.observe(elemento);
+
+  return observador;
+};
+
+function cuandoImagenVisible(imagen: Element) {
+  const { fuente } = (imagen as HTMLImageElement).dataset;
+  if (fuente) (imagen as HTMLImageElement).src = fuente;
+}
+
+  const imagenes = document.querySelectorAll<HTMLImageElement>('.perezoso');
+
+  imagenes.forEach((imagen: HTMLImageElement) => {
+    duranteInterseccion(imagen, cuandoImagenVisible, true, { threshold: 0.1 });
+  });
+</script>
+

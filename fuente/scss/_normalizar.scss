@@ -1,3 +1,4 @@
+@use 'constantes' as *;
 @import url('https://fonts.googleapis.com/css2?family=Nixie+One&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 html {
@@ -22,6 +23,7 @@ body {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  color: var(--colorFuente1);
 }
 
 h1,
@@ -31,14 +33,14 @@ h4,
 h5,
 h6 {
   font-family: 'Nixie One', system-ui;
-  font-weight: 400;
+  font-weight: 600;
   font-style: normal;
   padding-top: 2rem;
   margin: 0 0 0.5em;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   margin: 0;
 }
 
@@ -49,18 +51,17 @@ h2 {
 }
 
 h3 {
-  font-size: 1.9rem;
+  font-size: 2.2rem;
   border-bottom: 1px dotted;
   padding-bottom: 0.3em;
 }
 
 h4 {
-  font-size: 1.3rem;
+  font-size: 2rem;
 }
 
 h5 {
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 1.8rem;
 }
 
 a,
@@ -81,7 +82,7 @@ ul {
       width: 4px;
       height: 4px;
       border-radius: 50%;
-      background-color: rgb(249, 184, 252);
+      background-color: var(--colorFuente2);
       display: inline-block;
       vertical-align: middle;
       margin-right: 0.3em;

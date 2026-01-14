@@ -1,4 +1,5 @@
 ---
+import { agruparPorAño, crearSlug, ordenarAños } from '@/utilidades/ayudas';
 import { getCollection, render } from 'astro:content';
 
 const proyectos = await getCollection('proyectosGrado').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
@@ -6,55 +7,21 @@ const asistencias = await getCollection('asistentesInvestigacion').then((p) =>
   p.sort((a, b) => a.id.localeCompare(b.id))
 );
 
-const proyectosPorAño = proyectos.reduce(
-  (acc, proyecto) => {
-    const año = proyecto.data.año;
-    if (!año) {
-      console.warn(`Proyecto sin año definido: ${proyecto.id}`);
-      return acc;
-    }
-    if (!acc[año]) {
-      acc[año] = [];
-    }
-    acc[año].push(proyecto);
-    return acc;
-  },
-  {} as Record<string, typeof proyectos>
-);
+// Orden configurable de años: 'asc' o 'desc' (por defecto 'desc')
+const { orden = 'desc' }: { orden?: 'asc' | 'desc' } = Astro.props;
 
-const asistenciasPorAño = asistencias.reduce(
-  (acc, asistencia) => {
-    const año = asistencia.data.año;
-    if (!año) {
-      console.warn(`Asistencia sin año definido: ${asistencia.id}`);
-      return acc;
-    }
-    if (!acc[año]) {
-      acc[año] = [];
-    }
-    acc[año].push(asistencia);
-    return acc;
-  },
-  {} as Record<string, typeof asistencias>
-);
-
-function crearSlug(titulo: string): string {
-  return titulo
-    .normalize('NFD') // Descomponer caracteres acentuados
-    .replace(/[\u0300-\u036f]/g, '') // Eliminar marcas diacríticas (tildes)
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '') // Eliminar caracteres especiales
-    .replace(/\s+/g, '-') // Reemplazar espacios por guiones
-    .trim(); // Eliminar espacios al inicio y al final
-}
+const proyectosPorAño = agruparPorAño(proyectos);
+const asistenciasPorAño = agruparPorAño(asistencias);
+const añosProyectos = ordenarAños(proyectosPorAño, orden);
+const añosAsistencias = ordenarAños(asistenciasPorAño, orden);
 ---
 
 {
-  Object.entries(proyectosPorAño).map(async ([año, proyectos]) => (
+  añosProyectos.map(async (año) => (
     <section class="proyectosGrado">
       <h4>{año}</h4>
       <ul>
-        {proyectos.map(async (proyecto) => {
+        {proyectosPorAño[año].map(async (proyecto) => {
           const { Content } = await render(proyecto);
           return (
             <li>
@@ -88,8 +55,8 @@ function crearSlug(titulo: string): string {
 
 <ul class="proyectosGrado">
   {
-    Object.entries(asistenciasPorAño).map(async ([_, asistencias]) =>
-      asistencias.map(async (asistencia) => {
+    añosAsistencias.map(async (año) =>
+      asistenciasPorAño[año].map(async (asistencia) => {
         const { Content } = await render(asistencia);
         return (
           <li>
