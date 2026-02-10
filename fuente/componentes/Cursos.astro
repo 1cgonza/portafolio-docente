@@ -15,11 +15,13 @@ if (nivel === 'pregrado') {
   cursos = await getCollection('cursosMaestria').then((c) => c.sort((a, b) => a.id.localeCompare(b.id)));
 }
 
-const cursosRenderizados = cursos ? 
-  await Promise.all(cursos.map(async (pagina) => {
-    const { Content } = await render(pagina);
-    return { pagina, Content };
-  }))
+const cursosRenderizados = cursos
+  ? await Promise.all(
+      cursos.map(async (pagina) => {
+        const { Content } = await render(pagina);
+        return { pagina, Content };
+      })
+    )
   : [];
 ---
 
