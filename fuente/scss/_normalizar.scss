@@ -1,5 +1,6 @@
 @use 'constantes' as *;
 @import url('https://fonts.googleapis.com/css2?family=Nixie+One&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@300..700&display=swap');
 
 html {
   box-sizing: border-box;
@@ -19,11 +20,12 @@ body {
 }
 
 body {
-  font-family: 'Rubik', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
-  color: var(--colorFuente1);
+  font-variation-settings: 'wdth' 500;
+  font-size: 18px;
 }
 
 h1,
@@ -32,27 +34,25 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Nixie One', system-ui;
-  font-weight: 600;
-  font-style: normal;
+  font-family: 'Space Grotesk', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
   padding-top: 2rem;
   margin: 0 0 0.5em;
 }
 
 h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   margin: 0;
 }
 
 h2 {
   font-size: 2.5rem;
-  border-bottom: 2px solid;
   padding-bottom: 0.4em;
 }
 
 h3 {
   font-size: 2.2rem;
-  border-bottom: 1px dotted;
   padding-bottom: 0.3em;
 }
 

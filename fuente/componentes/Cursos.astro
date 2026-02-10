@@ -14,23 +14,39 @@ if (nivel === 'pregrado') {
 } else if (nivel === 'maestria') {
   cursos = await getCollection('cursosMaestria').then((c) => c.sort((a, b) => a.id.localeCompare(b.id)));
 }
+
+const cursosRenderizados = cursos ? 
+  await Promise.all(cursos.map(async (pagina) => {
+    const { Content } = await render(pagina);
+    return { pagina, Content };
+  }))
+  : [];
 ---
 
-{
-  cursos &&
-    cursos.map(async (pagina) => {
-      const { Content } = await render(pagina);
-      return (
-        <>
-          <h4 id={`${nivel}-${pagina.id}`}>{pagina.data.titulo}</h4>
-          <p>La dicté en los periodos: {pagina.data.ciclos.join(', ')}</p>
-          <Content />
-          <h5>Programa</h5>
-          <a href={`/pdfs/${pagina.data.programaPDF}`} target="_blank">
-            {pagina.data.titulo} (PDF)
-          </a>
-          <Galeria carpeta={pagina.data.carpetaPrograma || `programa-${pagina.id}`} />
-        </>
-      );
-    })
-}
+<div class="contenedor-cursos">
+  {
+    cursosRenderizados.map(({ pagina, Content }) => (
+      <section class="curso">
+        <h4 id={`${nivel}-${pagina.id}`}>{pagina.data.titulo}</h4>
+
+        <div class="descripcionCurso">
+          <div class="col1Descripcion">
+            <h5>Descripción</h5>
+            <Content />
+          </div>
+
+          <div class="col2Descripcion">
+            <h5>Periodos</h5>
+            <p>{pagina.data.ciclos.join(', ')}</p>
+
+            <h5>Programa</h5>
+            <a href={`/pdfs/${pagina.data.programaPDF}`} target="_blank">
+              {pagina.data.titulo} (PDF)
+            </a>
+            <Galeria carpeta={pagina.data.carpetaPrograma || `programa-${pagina.id}`} limite={2} />
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</div>
