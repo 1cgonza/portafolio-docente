@@ -253,43 +253,76 @@ header {
     font-weight: bold;
   }
 
-  .notaProyecto {
-    color: rgb(100, 100, 100);
-    margin: -0.8em 0 0 200px;
-
-    @media (max-width: 768px) {
-      margin: 0.5em 0 0 0;
-    }
+  ul {
+    padding: 0;
   }
 
   li {
-    margin-bottom: 1.4em;
+    margin-bottom: 1em;
+    display: flex;
+    gap: 0.3em;
+    align-items: baseline;
+
+    &:before {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0.5em;
+    }
+  }
+
+  .columna-izq {
+    flex-shrink: 0;
+    min-width: 200px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .caja {
+      padding: 0.2em;
+    }
+
+    @media (max-width: 768px) {
+      min-width: auto;
+    }
+  }
+
+  .columna-der {
+    flex: 1;
+    min-width: 0; // Para que el texto se pueda romper correctamente
+  }
+
+  .notaProyecto,
+  .notaAsistencia {
+    color: rgb(100, 100, 100);
+    margin-top: 0.5em;
+    font-size: 0.8em;
+
+    p {
+      margin: 0.3em 0;
+    }
   }
 }
 
 span.maestria {
   background-color: var(--colorCategoria1);
-  padding: 0.2em;
 }
 
 span.pregrado {
   background-color: var(--colorCategoria2);
-  padding: 0.2em;
 }
 
 span.jurado {
   background-color: var(--colorCategoria3);
-  padding: 0.2em;
 }
 
 span.asesor {
   background-color: var(--colorCategoria4);
-  padding: 0.2em;
 }
 
 span.opcion-de-grado {
   background-color: var(--colorCategoria5);
-  padding: 0.2em;
 }
 
 .conetendorVideo {

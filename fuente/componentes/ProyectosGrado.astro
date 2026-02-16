@@ -25,18 +25,23 @@ const añosAsistencias = ordenarAños(asistenciasPorAño, orden);
           const { Content } = await render(proyecto);
           return (
             <li>
-              <span class={crearSlug(proyecto.data.nivel)}>{proyecto.data.nivel}</span>
-              <span class={crearSlug(proyecto.data.tipo)}>{proyecto.data.tipo} </span>{' '}
-              <span class="año">{proyecto.data.año}</span> - <span class="titulo">"{proyecto.data.titulo}"</span> por{' '}
-              {proyecto.data.estudiantes.map((estudiante, index) => (
-                <span>
-                  {estudiante}
-                  {index < proyecto.data.estudiantes.length - 1 ? ', ' : ''}
-                </span>
-              ))}{' '}
-              - {proyecto.data.programa}
-              <div class="notaProyecto">
-                <Content />
+              <div class="columna-izq">
+                <span class={`caja ${crearSlug(proyecto.data.nivel)}`}>{proyecto.data.nivel}</span>
+                <span class={`caja ${crearSlug(proyecto.data.tipo)}`}>{proyecto.data.tipo} </span>{' '}
+                <span class="caja año">{proyecto.data.año}</span>
+              </div>
+              <div class="columna-der">
+                <span class="titulo">"{proyecto.data.titulo}"</span> por{' '}
+                {proyecto.data.estudiantes.map((estudiante, index) => (
+                  <span>
+                    {estudiante}
+                    {index < proyecto.data.estudiantes.length - 1 ? ', ' : ''}
+                  </span>
+                ))}{' '}
+                - {proyecto.data.programa}
+                <div class="notaProyecto">
+                  <Content />
+                </div>
               </div>
             </li>
           );
@@ -60,11 +65,16 @@ const añosAsistencias = ordenarAños(asistenciasPorAño, orden);
         const { Content } = await render(asistencia);
         return (
           <li>
-            <span class={crearSlug(asistencia.data.nivel)}>{asistencia.data.nivel}</span>
-            <span class={crearSlug(asistencia.data.tipo)}>{asistencia.data.tipo}</span>{' '}
-            <span class="año">{asistencia.data.año}</span> - <span class="nombre">{asistencia.data.nombre}</span>
-            <div class="notaAsistencia">
-              <Content />
+            <div class="columna-izq">
+              <span class={`caja ${crearSlug(asistencia.data.nivel)}`}>{asistencia.data.nivel}</span>
+              <span class={`caja ${crearSlug(asistencia.data.tipo)}`}>{asistencia.data.tipo}</span>{' '}
+              <span class="caja año">{asistencia.data.año}</span>
+            </div>
+            <div class="columna-der">
+              <span class="nombre">{asistencia.data.nombre}</span>
+              <div class="notaAsistencia">
+                <Content />
+              </div>
             </div>
           </li>
         );
