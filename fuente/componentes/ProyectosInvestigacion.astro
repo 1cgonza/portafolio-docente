@@ -110,64 +110,65 @@ const urlImagen = (id: string, llaveUObjeto: OpcionesImagenDirectus | string) =>
 ---
 
 <div class="contenedorTarjetas">
-  {proyectos.map((proyecto: Proyecto) => (
-    <h3>{proyecto.titulo}</h3>
-    <div class="contenedorImg">
-      {
-        proyecto.imagen ? (
-          <img
-            class="perezoso"
-            src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-            data-fuente={urlImagen(proyecto.imagen.id, {
-              width: 667,
-              height: 350,
-              quality: 90,
-              format: 'webp',
-            })}
-            alt={proyecto.imagen.title}
-            width={dimsImg.ancho}
-            height={dimsImg.alto}
-          />
-        ) : (
-          <img
-            src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-            alt={proyecto.titulo}
-            width={dimsImg.ancho}
-            height={dimsImg.alto}
-          />
-        )
-      }
-  </div>
-  ))}
-  
+  {
+    proyectos.map((proyecto: Proyecto) => (
+      <>
+        <h3>{proyecto.titulo}</h3>
+        <div class="contenedorImg">
+          {proyecto.imagen ? (
+            <img
+              class="perezoso"
+              src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+              data-fuente={urlImagen(proyecto.imagen.id, {
+                width: 667,
+                height: 350,
+                quality: 90,
+                format: 'webp',
+              })}
+              alt={proyecto.imagen.title}
+              width={dimsImg.ancho}
+              height={dimsImg.alto}
+            />
+          ) : (
+            <img
+              src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+              alt={proyecto.titulo}
+              width={dimsImg.ancho}
+              height={dimsImg.alto}
+            />
+          )}
+        </div>
+      </>
+    ))
+  }
 </div>
 
 <script>
   const duranteInterseccion = (
-  elemento: HTMLElement,
-  accion: (elemento: Element) => void,
-  desconectarInmediatamente = true,
-  opciones: IntersectionObserverInit
-) => {
-  const observador = new IntersectionObserver(([elementoObservado]) => {
-    if (elementoObservado && elementoObservado.isIntersecting) {
-      accion(elementoObservado.target);
+    elemento: HTMLElement,
+    accion: (elemento: Element) => void,
+    desconectarInmediatamente = true,
+    opciones: IntersectionObserverInit
+  ) => {
+    const observador = new IntersectionObserver(([elementoObservado]) => {
+      if (elementoObservado && elementoObservado.isIntersecting) {
+        accion(elementoObservado.target);
 
-      if (desconectarInmediatamente) {
-        observador.unobserve(elementoObservado.target);
+        if (desconectarInmediatamente) {
+          observador.unobserve(elementoObservado.target);
+        }
       }
-    }
-  }, opciones);
+    }, opciones);
 
-  observador.observe(elemento);
+    observador.observe(elemento);
 
-  return observador;
-};
+    return observador;
+  };
 
-function cuandoImagenVisible(imagen: Element) {
-  const { fuente } = (imagen as HTMLImageElement).dataset;
-  if (fuente) (imagen as HTMLImageElement).src = fuente;
-}
+  function cuandoImagenVisible(imagen: Element) {
+    const { fuente } = (imagen as HTMLImageElement).dataset;
+    if (fuente) (imagen as HTMLImageElement).src = fuente;
+  }
 
   const imagenes = document.querySelectorAll<HTMLImageElement>('.perezoso');
 
@@ -175,4 +176,3 @@ function cuandoImagenVisible(imagen: Element) {
     duranteInterseccion(imagen, cuandoImagenVisible, true, { threshold: 0.1 });
   });
 </script>
-
