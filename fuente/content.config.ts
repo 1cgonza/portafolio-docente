@@ -70,6 +70,88 @@ const asistentesInvestigacion = defineCollection({
     }),
 });
 
+const proyectosInvestigacion = defineCollection({
+  loader: glob({
+    pattern: ['*.{md,mdx}', '!_*.{md,mdx}', '!README.md'],
+    base: './fuente/contenido/investigacion/proyectos-investigacion',
+  }),
+  schema: ({ image }) =>
+    z.object({
+      // Básicos
+      titulo: z.string(),
+      slug: z.string().optional(),
+      año_inicio: z.number(),
+      año_fin: z.number().optional(),
+      estado: z.enum(['finalizado', 'en curso', 'publicado']).optional(),
+      // Clasificación
+      tipo: z.enum(['investigación', 'creación', 'investigación-creación']).optional(),
+      area: z.string().optional(),
+      // Rol y colaboración
+      rol: z.string().optional(),
+      colaboradores: z
+        .array(
+          z.object({
+            nombre: z.string(),
+            rol: z.string().optional(),
+            enlace: z.string().optional(),
+          })
+        )
+        .optional(),
+      instituciones: z.array(z.string()).optional(),
+      // Financiación
+      financiacion: z
+        .object({
+          tipo: z.string().optional(),
+          entidad: z.string().optional(),
+        })
+        .optional(),
+      // Productos y reconocimientos
+      productos: z
+        .array(
+          z.object({
+            tipo: z.string(),
+            titulo: z.string(),
+            enlace: z.string().optional(),
+          })
+        )
+        .optional(),
+      premios: z.array(z.string()).optional(),
+      menciones_prensa: z
+        .array(
+          z.object({
+            titulo: z.string(),
+            medio: z.string(),
+            enlace: z.string().optional(),
+          })
+        )
+        .optional(),
+      // Conexión con docencia
+      estudiantes_involucrados: z.number().optional(),
+      cursos_relacionados: z.array(z.string()).optional(),
+      // Medios
+      imagen_principal: image().optional(),
+      galeria: z.boolean().optional(),
+      videos: z
+        .array(
+          z.object({
+            plataforma: z.enum(['youtube', 'vimeo', 'instagram']).optional(),
+            id: z.string(),
+            titulo: z.string().optional(),
+          })
+        )
+        .optional(),
+      enlaces: z
+        .record(z.string()) // Permite cualquier clave con valor string
+        .optional(),
+      // SEO
+      descripcion: z.string().optional(),
+      // Compatibilidad con estructura antigua
+      año: z.number().optional(),
+      sede: z.string().optional(),
+      instagram: z.string().optional(),
+    }),
+});
+
 export const collections = {
   paginas,
   paginasDocencia,
@@ -77,4 +159,5 @@ export const collections = {
   cursosMaestria,
   proyectosGrado,
   asistentesInvestigacion,
+  proyectosInvestigacion,
 };

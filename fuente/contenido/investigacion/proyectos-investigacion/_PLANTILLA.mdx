@@ -1,0 +1,100 @@
+---
+# ============================================
+# PLANTILLA PARA PROYECTOS DE INVESTIGACIÓN
+# ============================================
+# Copia este archivo, renómbralo y completa los campos relevantes.
+# Puedes eliminar los campos que no apliquen a tu proyecto.
+# Los campos marcados con * son opcionales.
+
+# ==================== BÁSICOS ====================
+titulo: 'Título del proyecto'
+slug: 'nombre-del-proyecto' # * Slug para URL, si no se especifica se usa el nombre del archivo
+año_inicio: 2024
+año_fin: 2025 # * Omitir si está en curso
+estado: finalizado # * finalizado | en curso | publicado
+
+# ==================== CLASIFICACIÓN ====================
+tipo: creación # * investigación | creación | investigación-creación
+area: 'narrativas digitales' # * Área temática del proyecto
+
+# ==================== ROL Y COLABORACIÓN ====================
+rol: Director # * Director | Co-investigador | Colaborador
+colaboradores: # * Lista de colaboradores
+  - nombre: 'Nombre Apellido'
+    rol: 'Desarrollador' # * Rol en el proyecto
+    enlace: 'https://...' # * Sitio web o perfil
+instituciones: # * Instituciones participantes
+  - 'Universidad de los Andes'
+
+# ==================== FINANCIACIÓN ====================
+financiacion: # * Información de financiación
+  tipo: 'FAPA' # * FAPA | Convocatoria interna | Convocatoria externa | Institucional | Sin financiación
+  entidad: 'Vicerrectoría de Investigación' # * Entidad financiadora
+
+# ==================== PRODUCTOS Y RECONOCIMIENTOS ====================
+productos: # * Productos derivados del proyecto
+  - tipo: publicación # * publicación | exhibición | software | base de datos | etc.
+    titulo: 'Título del producto'
+    enlace: 'https://...' # * Enlace al producto
+
+premios: # * Premios y reconocimientos
+  - 'Nombre del premio - Entidad - Año'
+
+menciones_prensa: # * Menciones en medios
+  - titulo: 'Título del artículo'
+    medio: 'Nombre del medio'
+    enlace: 'https://...' # * Enlace al artículo
+
+# ==================== CONEXIÓN CON DOCENCIA ====================
+estudiantes_involucrados: 5 # * Número de estudiantes que participaron
+cursos_relacionados: # * Cursos donde se integró el proyecto
+  - 'Nombre del curso'
+
+# ==================== MEDIOS ====================
+# imagen_principal: * Descomenta y usa una imagen de la carpeta del proyecto
+#   Ejemplo: ./nombre-del-proyecto/imagen.jpg
+
+galeria: false # * true si hay carpeta con imágenes adicionales
+
+videos: # * Videos del proyecto
+  - plataforma: youtube # * youtube | vimeo | instagram
+    id: 'ID_del_video' # ID o URL completa
+    titulo: 'Título descriptivo del video' # * Título del video
+
+enlaces: # * Enlaces externos relevantes
+  web: 'https://proyecto.com'
+  repositorio: 'https://github.com/usuario/proyecto'
+  instagram: 'https://instagram.com/...'
+  # Puedes agregar más enlaces con cualquier nombre de clave
+
+# ==================== SEO Y DESCRIPCIÓN ====================
+descripcion: 'Breve descripción de 1-2 líneas para listados y SEO'
+---
+
+## Título de sección (opcional)
+
+Aquí va el contenido detallado del proyecto en Markdown. Puedes usar:
+
+- **Negritas** y _cursivas_
+- Listas numeradas y con viñetas
+- Enlaces [texto del enlace](https://url.com)
+- Imágenes locales ![alt text](./ruta/imagen.jpg)
+- Citas
+
+> Esta es una cita
+
+### Subsecciones
+
+Puedes organizar el contenido en subsecciones para describir:
+
+- Contexto y motivación
+- Metodología
+- Resultados
+- Impacto
+- Conclusiones
+
+## Elementos multimedia
+
+Los videos e imágenes se pueden incluir en el frontmatter (ver arriba) o directamente en el contenido:
+
+![Descripción de la imagen](./nombre-proyecto/imagen.jpg)

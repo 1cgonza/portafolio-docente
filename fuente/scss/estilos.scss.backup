@@ -1,0 +1,1152 @@
+@use './normalizar' as *;
+
+::selection {
+  background-color: var(--colorFuente2);
+  color: var(--colorFuente1);
+}
+
+.menuToggle {
+  display: none;
+}
+
+.menuHamburguesa {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 1002;
+
+  span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--colorFuente2);
+    border-radius: 2px;
+    transition: all 0.35s ease;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    position: fixed;
+    top: 1em;
+    left: 1em;
+  }
+}
+
+.menuToggle:checked ~ .menuHamburguesa {
+  span:nth-child(1) {
+    transform: rotate(45deg) translate(10px, 10px);
+  }
+
+  span:nth-child(2) {
+    opacity: 0;
+  }
+
+  span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+}
+
+ul {
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+li {
+  padding-left: 1.25em;
+  position: relative;
+  line-height: 1.5;
+  margin-bottom: 0 !important;
+  list-style: none !important;
+
+  &::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--colorFuente2);
+    font-weight: bold;
+  }
+}
+
+#menu {
+  position: fixed;
+  width: 15%;
+  min-height: 100vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  font-size: 0.85em;
+
+  ul {
+    padding: 0.5em;
+
+    li {
+      padding-left: 0.7em;
+      line-height: 1.2;
+      margin: 0.5em 0;
+
+      &::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--colorFuente2);
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0.5em 0.3em 0 0;
+      }
+    }
+
+    ul {
+      padding-left: 1em;
+      font-size: 0.9em;
+      li {
+        line-height: 1;
+        margin: 0.3em 0;
+        &::before {
+          width: 3px;
+          height: 3px;
+        }
+      }
+    }
+  }
+
+  a,
+  a:link {
+    color: var(--colorFuente1);
+    transition: color 0.35s ease-out;
+
+    &:hover {
+      color: rgb(222, 63, 234);
+    }
+  }
+
+  /* Responsive para tablet */
+  @media (max-width: 1200px) {
+    width: 200px;
+    font-size: 0.75em;
+  }
+
+  /* Responsive para móvil */
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0.5em;
+    max-height: 0;
+    overflow-y: auto;
+    transition: max-height 0.35s ease-in-out;
+
+    ul {
+      display: flex;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      width: 100%;
+
+      ul {
+        display: none;
+      }
+    }
+
+    li {
+      margin: 0.5em 0.5em 0.5em 0;
+    }
+
+    a,
+    a:link {
+      display: block;
+      padding: 0.5em 0.8em;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 0.3em;
+      text-decoration: none;
+
+      &:hover {
+        background-color: rgba(222, 63, 234, 0.3);
+      }
+    }
+  }
+}
+
+.menuToggle:checked ~ #menu {
+  @media (max-width: 768px) {
+    max-height: 100vh;
+    padding: 3.5em 0.5em 0.5em 0.5em;
+  }
+}
+
+main {
+  width: 85%;
+  position: absolute;
+  right: 0;
+  padding: 1em 3em 5em 3em;
+
+  li {
+    margin-bottom: 0.8em;
+  }
+
+  h2 {
+    font-size: 2.5em;
+    margin-bottom: 0;
+  }
+
+  h3 {
+    border-bottom: 1px solid;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 1.8em;
+  }
+
+  h5 {
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+
+  p {
+    line-height: 1.5;
+    font-size: 1.2em;
+  }
+
+  /* Responsive para tablet */
+  @media (max-width: 1200px) {
+    width: calc(100% - 200px);
+    padding: 1em 2em 5em 2em;
+    font-size: 0.95em;
+  }
+
+  /* Responsive para móvil */
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    padding: 0.5em;
+    z-index: 0;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      padding-top: 1rem;
+      font-size: clamp(1.2em, 5vw, 2.5em);
+    }
+
+    p {
+      margin-right: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    ul {
+      padding: 0.5em 0.5em 0.5em 1.5em;
+    }
+
+    img,
+    video,
+    iframe {
+      max-width: 100% !important;
+      height: auto;
+    }
+  }
+}
+
+header {
+  width: 100%;
+  margin: 0 0 0 auto;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  padding-bottom: 0.3em;
+
+  h1 {
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    font-size: 3em;
+    padding-top: 0.3em;
+  }
+
+  h2 {
+    padding: 0;
+    text-transform: uppercase;
+    font-size: 1.6em;
+  }
+
+  @media (max-width: 768px) {
+    text-align: left;
+    width: 100%;
+    margin: 0;
+  }
+
+  h1 {
+    @media (max-width: 768px) {
+      font-size: 1.5em;
+    }
+  }
+
+  p {
+    @media (max-width: 768px) {
+      font-size: 0.9em;
+    }
+  }
+}
+
+.proyectosGrado {
+  .titulo {
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  .nombre {
+    font-weight: bold;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 1em;
+    display: flex;
+    gap: 0.3em;
+    align-items: baseline;
+
+    &:before {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0.5em;
+    }
+  }
+
+  .columna-izq {
+    flex-shrink: 0;
+    min-width: 200px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .caja {
+      padding: 0.2em;
+    }
+
+    @media (max-width: 768px) {
+      min-width: auto;
+    }
+  }
+
+  .columna-der {
+    flex: 1;
+    min-width: 0; // Para que el texto se pueda romper correctamente
+  }
+
+  .notaProyecto,
+  .notaAsistencia {
+    color: rgb(100, 100, 100);
+    margin-top: 0.5em;
+    font-size: 0.8em;
+
+    p {
+      margin: 0.3em 0;
+    }
+  }
+}
+
+span.maestria {
+  background-color: var(--colorCategoria1);
+}
+
+span.pregrado {
+  background-color: var(--colorCategoria2);
+}
+
+span.jurado {
+  background-color: var(--colorCategoria3);
+}
+
+span.asesor {
+  background-color: var(--colorCategoria4);
+}
+
+span.opcion-de-grado {
+  background-color: var(--colorCategoria5);
+}
+
+.conetendorVideo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 0.5em;
+  background-color: #000;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+.contenedor-cursos {
+  width: 100%;
+}
+
+.curso {
+  width: 100%;
+  margin-bottom: 2em;
+}
+
+.descripcionCurso {
+  display: flex;
+  gap: 2em;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.col1Descripcion {
+  flex: 1;
+  min-width: 0;
+}
+
+.col2Descripcion {
+  flex: 1;
+  min-width: 0;
+}
+
+// Proyectos de investigación
+.proyectosInvestigacion {
+  display: grid;
+  gap: 3em;
+  margin-top: 2em;
+}
+
+.tarjetaProyecto {
+  position: relative;
+  transition: transform 0.2s ease;
+
+  // &::before {
+  //   content: '';
+  //   width: 10px;
+  //   height: 100%;
+  //   background-color: #000;
+  //   position: absolute;
+  //   left: -2em;
+  //   top: 0;
+  // }
+
+  .imagenDestacada {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: #f5f5f5;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+      height: 250px;
+    }
+  }
+
+  .contenidoTarjeta {
+    @media (max-width: 768px) {
+      padding: 1.5em;
+    }
+  }
+
+  .headerProyecto {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: 2px solid var(--colorFuente2);
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  .tituloYAño {
+    flex: 1;
+  }
+
+  .tituloProyecto {
+    margin: 0 0 0.5em 0;
+    padding-top: 1em;
+    color: var(--colorFuente1);
+    font-size: 1.5em;
+    border-bottom: none;
+    text-transform: none;
+
+    @media (max-width: 768px) {
+      font-size: 1.25em;
+    }
+  }
+
+  .añoProyecto {
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--colorFuente1);
+    opacity: 0.7;
+  }
+
+  .badge {
+    padding: 0.35em 0.75em;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge-finalizado {
+    background: var(--colorCategoria3);
+    color: var(--colorFuente1);
+  }
+
+  .badge-en-curso {
+    background: var(--colorCategoria5);
+    color: var(--colorFuente1);
+  }
+
+  .badge-publicado {
+    background: var(--colorCategoria1);
+    color: var(--colorFuente1);
+  }
+
+  .contenidoProyecto {
+    margin-bottom: 2em;
+    line-height: 1.7;
+
+    p {
+      font-size: 1em;
+    }
+  }
+
+  .gridMetadatos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1em;
+    padding: 1.5em;
+    // margin-bottom: 1.5em;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--colorFuente1);
+
+    // OPCIÓN EXPERIMENTAL 1: Píxeles que respiran (animación sutil)
+    // background-color: var(--colorCategoria1);
+    // background-image: radial-gradient(circle at center, var(--colorCategoria2) 0.2rem, transparent 0.2rem);
+    // background-size: 1rem 1rem;
+    // animation: breathePixels 8s ease-in-out infinite;
+
+    // OPCIÓN EXPERIMENTAL 2: Gradiente de ruido animado
+    // background: linear-gradient(
+    //   120deg,
+    //   var(--colorCategoria1) 0%,
+    //   var(--colorCategoria2) 50%,
+    //   var(--colorCategoria1) 100%
+    // );
+    // background-size: 200% 200%;
+    // animation: gradientShift 15s ease infinite;
+
+    // OPCIÓN EXPERIMENTAL 3: Patrón de líneas con desplazamiento
+    // background-color: #ffffff;
+    // background-image: repeating-linear-gradient(45deg, transparent, transparent 0.5rem, #f0ecec 0.5rem, #ccc 0.55rem);
+    // background-size: 200% 200%;
+    // animation: lineSlide 20s linear infinite;
+
+    // OPCIÓN EXPERIMENTAL 4: Cuadrícula pulsante
+    // background-color: var(--colorCategoria1);
+    // background-image: linear-gradient(var(--colorCategoria2) 1px, transparent 1px),
+    //   linear-gradient(90deg, var(--colorCategoria2) 1px, transparent 1px);
+    // background-size: 1rem 1rem;
+    // animation: gridPulse 6s ease-in-out infinite;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      padding: 1em;
+    }
+
+    // Reducir animación en dispositivos móviles para mejor rendimiento
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  // Animaciones experimentales (CSS puro, muy ligero)
+  @keyframes breathePixels {
+    0%,
+    100% {
+      background-size: 1rem 1rem;
+      opacity: 1;
+    }
+    50% {
+      background-size: 1.1rem 1.1rem;
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes lineSlide {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  @keyframes gridPulse {
+    0%,
+    100% {
+      background-size: 1rem 1rem;
+    }
+    50% {
+      background-size: 1.2rem 1.2rem;
+    }
+  }
+
+  // Efecto glitch sutil para imágenes
+  @keyframes glitchImage {
+    0% {
+      transform: translate(0);
+      filter: none;
+    }
+    20% {
+      transform: translate(-2px, 1px);
+      filter: hue-rotate(5deg);
+    }
+    40% {
+      transform: translate(2px, -1px);
+      filter: hue-rotate(-5deg);
+    }
+    60% {
+      transform: translate(-1px, 2px);
+      filter: hue-rotate(3deg);
+    }
+    80% {
+      transform: translate(1px, -2px);
+      filter: hue-rotate(-3deg);
+    }
+    100% {
+      transform: translate(0);
+      filter: none;
+    }
+  }
+
+  .itemMetadato {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+  }
+
+  .etiquetaMetadato {
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--colorFuente1);
+    opacity: 0.7;
+  }
+
+  .valorMetadato {
+    font-size: 0.95em;
+    font-weight: 500;
+    color: var(--colorFuente1);
+
+    small {
+      font-size: 0.85em;
+      opacity: 0.8;
+    }
+  }
+
+  .seccionLista {
+    // margin-bottom: 1.5em;
+
+    h5 {
+      font-size: 0.9em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--colorFuente1);
+      margin-bottom: 0.75em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--colorFuente2);
+      text-decoration: none;
+    }
+  }
+
+  .badgeProducto {
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    background: var(--colorFuente2);
+    color: var(--colorFuente1);
+    border-radius: 3px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .textoSecundario {
+    color: var(--colorFuente1);
+    opacity: 0.7;
+    font-size: 0.9em;
+  }
+
+  .seccionEnlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75em;
+    margin: 1.5em 0;
+  }
+
+  .botonEnlace {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background: var(--colorFuente1);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--colorFuente2);
+      color: var(--colorFuente1);
+      transform: translateY(-2px);
+    }
+  }
+
+  .seccionVideos {
+    margin: 1em 0 0 0;
+  }
+
+  .videoEmbed {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 1em;
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .seccionGaleria {
+    margin-top: 1em;
+
+    h5 {
+      font-size: 0.9em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--colorFuente1);
+      margin-bottom: 1em;
+      text-decoration: none;
+    }
+  }
+
+  a {
+    color: var(--colorFuente1);
+    text-decoration: underline;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--colorFuente2);
+    }
+  }
+}
+
+// Estilos para componente de Evaluaciones Estudiantes
+.evaluaciones-estudiantes {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 2rem;
+
+  .documento-principal {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin: 0 0 1.25rem 0;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .imagen-historico {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+      }
+
+      .descripcion-imagen {
+        font-size: 0.85rem;
+        color: #666;
+        font-style: italic;
+        margin: 0.5rem 0 0 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .btn-principal {
+    display: inline-block;
+    background: white;
+    color: #667eea;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .guia-reportes {
+    background: var(--color-fondo-secundario, #f9f9f9);
+    padding: 1.5rem;
+    border-radius: 8px;
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+  }
+
+  .tipos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .tipo-reporte {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid #667eea;
+
+    strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+      font-size: 1rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+    }
+  }
+
+  .evaluaciones-por-ano {
+    margin-top: 0.5rem;
+
+    > h4 {
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+  }
+
+  .ano-seccion {
+    margin-bottom: 2.5rem;
+  }
+
+  .periodos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  // Tarjetas de periodo
+  .periodo-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    transition: box-shadow 0.3s, border-color 0.3s;
+
+    &:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+  }
+
+  // Header de la tarjeta
+  .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+  }
+
+  .periodo-titulo {
+    margin: 0 0 1rem 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .documentos-enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .link-documento {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    &:hover {
+      background: white;
+      color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  // Cuerpo de la tarjeta
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h6 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      list-style: none;
+
+      li {
+        position: relative;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+        color: #555;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: -1.5rem;
+          color: #667eea;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  // Sección de imagen comparativa
+  .seccion-imagen {
+    margin-bottom: 1.5rem;
+    text-align: center;
+
+    img {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.75rem;
+    }
+
+    .descripcion-imagen {
+      font-size: 0.85rem;
+      color: #666;
+      font-style: italic;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  // Sección de cursos
+  .seccion-cursos {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+  }
+
+  .lista-cursos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+
+    li {
+      background: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #667eea;
+      font-weight: 500;
+      border: 1px solid #e0e0e0;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+
+  // Aspectos positivos
+  .seccion-aspectos.positivos {
+    border-left: 4px solid #28a745;
+    padding-left: 1rem;
+
+    h6 {
+      color: #28a745;
+    }
+
+    ul li::before {
+      color: #28a745;
+    }
+  }
+
+  // Aspectos por mejorar
+  .seccion-aspectos.por-mejorar {
+    border-left: 4px solid #ffc107;
+    padding-left: 1rem;
+
+    h6 {
+      color: #e67e00;
+    }
+
+    ul li::before {
+      color: #ffc107;
+    }
+  }
+
+  // Reflexión
+  .seccion-reflexion {
+    background: #f8f4ff;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid #764ba2;
+
+    h6 {
+      color: #764ba2;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.7;
+      color: #444;
+      font-style: italic;
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    gap: 2rem;
+
+    .documento-principal {
+      padding: 1.5rem;
+    }
+
+    .tipos-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card-header {
+      padding: 1.25rem;
+    }
+
+    .periodo-titulo {
+      font-size: 1.1rem;
+    }
+
+    .documentos-enlaces {
+      flex-direction: column;
+    }
+
+    .link-documento {
+      text-align: center;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    .lista-cursos {
+      flex-direction: column;
+
+      li {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}

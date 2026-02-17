@@ -1,0 +1,328 @@
+---
+// Estructura de datos de evaluaciones organizadas por año
+const evaluacionesPorAno = {
+  2025: [
+    {
+      periodo: '2025-2',
+      principal: '202520-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202520-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202520.png',
+      cursos: ['Laboratorio de Animación', 'Datos y Representación'],
+      aspectosPositivos: [
+        'Varios estudiantes mencionan específicamente que el curso "conecta herramientas técnicas con reflexión crítica sobre el impacto social de las tecnologías"',
+        'Evaluación del 100% en "fomento de pensamiento crítico"—el porcentaje más alto posible en esta métrica',
+        'Comentarios recurrentes sobre sentirse cómodos haciendo preguntas y participando sin temor',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Los estudiantes usan las mismas palabras que yo: "conectar lo técnico con lo crítico". Después de seis años enseñando estos cursos, parece que la conexión que busco no es solo algo que yo digo sino algo que ellos experimentan. El 100% en pensamiento crítico es raro—significa que no sienten que están solo siguiendo tutoriales.',
+    },
+    {
+      periodo: '2025-1',
+      principal: '202510-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202510-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202510.png',
+      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación', 'Narrativa Audiovisual 2'],
+      aspectosPositivos: ['Interés estudiantil en aplicaciones profesionales de visualización'],
+      aspectosPorMejorar: [
+        'Estudiantes solicitan más profundización en herramientas profesionales (Power BI, Tableau)',
+        'Necesidad de mayor tiempo para ejercicios técnicos',
+        'Clarificar expectativas sobre contenido del curso desde el inicio',
+      ],
+      reflexion:
+        'Semestre que evidencia una tensión productiva entre las expectativas de herramientas profesionales y el enfoque conceptual del curso. Esta retroalimentación invita a repensar el balance entre técnica y crítica, o a comunicar mejor los objetivos pedagógicos desde el principio.',
+    },
+  ],
+  2024: [
+    {
+      periodo: '2024-2',
+      principal: '202420-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202420-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202420.png',
+      cursos: ['Datos y Representación', 'Laboratorio de Animación'],
+      aspectosPositivos: [
+        'Estudiantes reportan que el curso cambia completamente su perspectiva sobre visualización',
+        'Desarrollo de capacidad de análisis crítico de datos',
+        'Transformación en la disposición hacia el entorno digital',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Semestre que evidencia el impacto transformador del curso en la forma como los estudiantes se relacionan con los datos y la visualización. No solo aprenden técnicas, sino que desarrollan una nueva perspectiva crítica sobre el mundo digital.',
+    },
+    {
+      periodo: '2024-1',
+      principal: '202410-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202410-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202410.png',
+      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación', 'Narrativa Transmedia'],
+      aspectosPositivos: [
+        'Alta motivación estudiantil en todos los cursos',
+        'Conexión fuerte con el contenido y metodología',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Periodo de consolidación donde la metodología presencial y el contenido de los cursos generan alta satisfacción y conexión emocional con los estudiantes. La expresión entusiasta de afecto académico refleja el impacto del curso más allá de lo técnico.',
+    },
+  ],
+  2023: [
+    {
+      periodo: '2023-2',
+      principal: '202320-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202320-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202320.png',
+      cursos: ['Cultura Digital', 'Laboratorio de Animación', 'Datos y Representación', 'Narrativa Transmedia'],
+      aspectosPositivos: [
+        'Valoración alta de ambiente de confianza para participar',
+        'Flexibilidad metodológica reconocida por estudiantes',
+        'Evaluación 100% en pensamiento crítico',
+      ],
+      aspectosPorMejorar: [
+        'Mayor claridad en objetivos y alcance de proyectos finales desde el inicio',
+        'Un estudiante reporta sentirse perdido por falta de dirección inicial',
+      ],
+      reflexion:
+        'Semestre con carga docente amplia (cuatro cursos distintos) donde se mantiene un ambiente pedagógico positivo, pero surge la necesidad de comunicar mejor las expectativas de proyectos finales desde las primeras semanas.',
+    },
+    {
+      periodo: '2023-1',
+      principal: '202310-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202310-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202310.png',
+      cursos: ['Visualización y Storytelling', 'Narrativa Transmedia'],
+      aspectosPositivos: [
+        'Regreso completo a presencialidad bien recibido',
+        'Manejo exitoso de grupos de diferentes tamaños',
+      ],
+      aspectosPorMejorar: [
+        'Diferencias notables en evaluaciones según tamaño de curso',
+        'Grupos grandes presentan desafíos particulares de evaluación',
+      ],
+      reflexion:
+        'Primera experiencia completamente presencial post-pandemia. Se evidencia que el tamaño del grupo afecta significativamente la experiencia estudiantil y la evaluación, lo que invita a pensar estrategias diferenciadas para grupos grandes vs pequeños.',
+    },
+  ],
+  2022: [
+    {
+      periodo: '2022-2',
+      principal: '202220-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202220-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202220.png',
+      cursos: ['Visiones Investigación-Creación', 'Laboratorio de Animación', 'Narrativa'],
+      aspectosPositivos: [
+        'Resolución exitosa de un ambiente tóxico de trabajo en el curso',
+        'Valoración alta en fomento de autonomía estudiantil',
+        'Reconocimiento del desarrollo de pensamiento crítico',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Semestre que marca la incorporación de investigación-creación al repertorio docente. Destaca especialmente la capacidad de transformar dinámicas grupales negativas, demostrando que el ambiente de aprendizaje es tan importante como el contenido.',
+    },
+    {
+      periodo: '2022-1',
+      principal: '202210-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202210-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202210.png',
+      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación'],
+      aspectosPositivos: [
+        'Transición exitosa a modalidad híbrida y presencial',
+        'Adaptación valorada por estudiantes después de dos años de virtualidad',
+        'Mantenimiento de calidad pedagógica en el cambio de formato',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Retorno a presencialidad después de dos años. La capacidad de adaptación desarrollada en la virtualidad se traduce en una transición fluida que los estudiantes valoran. Se recupera la riqueza del encuentro presencial sin perder lo aprendido en lo virtual.',
+    },
+  ],
+  2021: [
+    {
+      periodo: '2021-2',
+      principal: '202120-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202120-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202120.png',
+      cursos: ['Visualización', 'Narrativa'],
+      aspectosPositivos: [
+        'Coherencia fuerte entre actividades y objetivos del curso',
+        'Fomento efectivo de colaboración entre estudiantes',
+        'Consolidación de metodología virtual desarrollada',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Periodo de consolidación post-protestas donde se estabiliza y perfecciona la metodología virtual. Después de la intensidad emocional del semestre anterior, este representa un momento de aterrizaje y sistematización de lo aprendido.',
+    },
+    {
+      periodo: '2021-1',
+      principal: '202110-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202110-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202110.png',
+      cursos: ['Visualización', 'Narrativa'],
+      aspectosPositivos: [
+        'Promedio excepcional de 4.97/5.0',
+        'Contenido sobre narrativas como agentes políticos resonó profundamente',
+        'Estudiantes pudieron convertir angustias personales en narrativas con sentido',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Semestre atípico durante el paro nacional. El material sobre las potencias políticas de las narrativas cobró un sentido urgente y necesario. Los estudiantes encontraron en el curso herramientas para procesar y dar forma a sus angustias sociales y personales—una sincronización entre contenido y contexto que espero no volver a necesitar.',
+    },
+  ],
+  2020: [
+    {
+      periodo: '2020-2',
+      principal: '202020-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '202020-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-202020.png',
+      cursos: ['Datos y Representación', 'Narrativa Multimedia'],
+      aspectosPositivos: [
+        'Adaptación consolidada a formato virtual',
+        'Mantenimiento de rigor académico en condiciones adversas',
+      ],
+      aspectosPorMejorar: [
+        'Evaluaciones reflejan limitaciones de equipos domésticos',
+        'Espacios no diseñados para trabajo académico intenso',
+      ],
+      reflexion:
+        'Segundo semestre virtual donde se evidencian las consecuencias materiales de la pandemia. Las evaluaciones más bajas en infraestructura no reflejan problemas pedagógicos sino las realidades desiguales de acceso a tecnología y espacios adecuados de trabajo desde casa.',
+    },
+    {
+      periodo: '2020-1',
+      principal: '202010-GENERAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: null,
+      imagen: null,
+      cursos: ['Visualización', 'Narrativa'],
+      aspectosPositivos: [
+        'Adaptación rápida a virtualidad forzada por pandemia',
+        'Flexibilidad con plazos valorada por estudiantes',
+        'Comentario: "Se extendieron los plazos"',
+      ],
+      aspectosPorMejorar: [],
+      reflexion:
+        'Transición abrupta a virtualidad en contexto de crisis sanitaria. La extensión de plazos refleja la necesidad de flexibilidad y comprensión ante circunstancias excepcionales. Aprendizaje acelerado de herramientas y metodologías virtuales.',
+    },
+  ],
+  2019: [
+    {
+      periodo: '2019-2',
+      principal: '201920-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      comparado: '201920-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
+      imagen: '/imagenes/evaluacion-201920.png',
+      cursos: ['Narrativa Multimedia', 'Datos y Representación'],
+      aspectosPositivos: [
+        'Ajustes rápidos al formato intensivo de 8 semanas',
+        'Mantenimiento de nivel de exigencia sin comprometer calidad',
+      ],
+      aspectosPorMejorar: [
+        'Nerviosismo inicial del primer semestre',
+        'Adaptación al formato de clases de 2 horas',
+        'Evaluaciones más bajas del histórico',
+      ],
+      reflexion:
+        'Primer semestre como docente. El nerviosismo inicial y la inexperiencia se compensaron con capacidad de ajuste rápido y compromiso con la exigencia. Las evaluaciones más bajas son esperables en un inicio, pero ya muestran la voluntad de no bajar estándares pese a las dificultades.',
+    },
+  ],
+};
+
+const anos = Object.keys(evaluacionesPorAno).sort((a, b) => Number(b) - Number(a));
+---
+
+<div class="evaluaciones-estudiantes">
+  <!-- Introducción -->
+  <div class="introduccion">
+    <p>
+      Cada periodo presenta un resumen que incluye los cursos dictados, los aspectos destacados según los estudiantes,
+      los aspectos por mejorar cuando fue el caso, y una reflexión sobre lo que significó ese momento en mi trayectoria
+      docente. Las gráficas comparativas muestran mis promedios de evaluación en relación con los de la Facultad de
+      Artes y Humanidades y la Universidad. Los dos documentos oficiales de cada periodo—<strong
+        >Reporte Principal</strong
+      >
+      y <strong>Reporte Comparado</strong>—son documentos en PDF con toda la información detallada, y están disponibles
+      para consulta.
+    </p>
+  </div>
+
+  <!-- Evaluaciones por periodo -->
+  <div class="evaluaciones-por-ano">
+    {
+      anos.map((ano) => (
+        <div class="ano-seccion">
+          <div class="periodos-lista">
+            {evaluacionesPorAno[ano].map((evaluacion) => (
+              <div class="periodo-card">
+                <div class="card-header">
+                  <h5 class="periodo-titulo">{evaluacion.periodo}</h5>
+                  <div class="documentos-enlaces">
+                    <a
+                      href={`/pdfs/evaluaciones/${evaluacion.principal}`}
+                      target="_blank"
+                      class="link-documento principal"
+                    >
+                      Reporte Principal
+                    </a>
+                    {evaluacion.comparado && (
+                      <a
+                        href={`/pdfs/evaluaciones/${evaluacion.comparado}`}
+                        target="_blank"
+                        class="link-documento comparado"
+                      >
+                        Reporte Comparado
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  {evaluacion.imagen && (
+                    <div class="seccion-imagen">
+                      <img
+                        src={evaluacion.imagen}
+                        alt={`Gráfica comparativa de evaluaciones - ${evaluacion.periodo}`}
+                      />
+                      <p class="descripcion-imagen">
+                        Comparación de promedios: Juan Camilo González vs Facultad de Artes y Humanidades vs Universidad
+                      </p>
+                    </div>
+                  )}
+
+                  <div class="seccion-cursos">
+                    <h6>Cursos dictados</h6>
+                    <ul class="lista-cursos">
+                      {evaluacion.cursos.map((curso) => (
+                        <li>{curso}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {evaluacion.aspectosPositivos.length > 0 && (
+                    <div class="seccion-aspectos positivos">
+                      <h6>✓ Aspectos destacados</h6>
+                      <ul>
+                        {evaluacion.aspectosPositivos.map((aspecto) => (
+                          <li>{aspecto}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {evaluacion.aspectosPorMejorar.length > 0 && (
+                    <div class="seccion-aspectos por-mejorar">
+                      <h6>→ Aspectos por mejorar</h6>
+                      <ul>
+                        {evaluacion.aspectosPorMejorar.map((aspecto) => (
+                          <li>{aspecto}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div class="seccion-reflexion">
+                    <h6>Reflexión</h6>
+                    <p>{evaluacion.reflexion}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

@@ -1,0 +1,308 @@
+---
+import { getCollection, render } from 'astro:content';
+import Galeria from './Galeria.astro';
+
+const proyectos = await getCollection('proyectosInvestigacion');
+
+// Ordenar por año de inicio, más reciente primero
+proyectos.sort((a, b) => {
+  const añoA = a.data.año_inicio || a.data.año || 0;
+  const añoB = b.data.año_inicio || b.data.año || 0;
+  return añoB - añoA;
+});
+
+function obtenerAñoDisplay(proyecto: (typeof proyectos)[0]) {
+  const inicio = proyecto.data.año_inicio || proyecto.data.año;
+  const fin = proyecto.data.año_fin;
+
+  if (inicio && fin && inicio !== fin) {
+    return `${inicio} - ${fin}`;
+  }
+  if (inicio && proyecto.data.estado === 'en curso') {
+    return `${inicio} - presente`;
+  }
+  return inicio ? `${inicio}` : '';
+}
+
+function obtenerIdVideo(url: string, plataforma?: string): string | null {
+  if (!url) return null;
+
+  // YouTube
+  const youtubeMatch =
+    url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\?\/]+)/) ||
+    url.match(/^([a-zA-Z0-9_-]{11})$/);
+  if (youtubeMatch) return youtubeMatch[1];
+
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/) || url.match(/^\d+$/);
+  if (vimeoMatch) return vimeoMatch[1];
+
+  // Instagram (ya viene como URL completa)
+  if (url.includes('instagram.com')) return url;
+
+  return url;
+}
+---
+
+<div class="proyectosInvestigacion">
+  {
+    proyectos.map(async (proyecto) => {
+      const { Content } = await render(proyecto);
+      const año = obtenerAñoDisplay(proyecto);
+      const carpetaGaleria = proyecto.data.slug || proyecto.id.replace('.mdx', '').replace('.md', '');
+
+      return (
+        <article class="tarjetaProyecto" id={carpetaGaleria}>
+          {/* Imagen principal */}
+          {proyecto.data.imagen_principal && (
+            <div class="imagenDestacada">
+              <img src={proyecto.data.imagen_principal.src} alt={proyecto.data.titulo} />
+            </div>
+          )}
+
+          <div class="contenidoTarjeta">
+            {/* Header con título y año */}
+            <header class="headerProyecto">
+              <div class="tituloYAño">
+                <h3 class="tituloProyecto">{proyecto.data.titulo}</h3>
+                {año && <span class="añoProyecto">{año}</span>}
+              </div>
+              {proyecto.data.estado && (
+                <span class={`badge badge-${proyecto.data.estado.replace(' ', '-')}`}>{proyecto.data.estado}</span>
+              )}
+            </header>
+
+            {/* Contenido del proyecto */}
+            <div class="contenidoProyecto">
+              <Content />
+            </div>
+
+            {/* Metadatos en grid compacto */}
+            <div class="gridMetadatos">
+              {proyecto.data.tipo && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Tipo</span>
+                  <span class="valorMetadato">{proyecto.data.tipo}</span>
+                </div>
+              )}
+
+              {proyecto.data.rol && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Rol</span>
+                  <span class="valorMetadato">{proyecto.data.rol}</span>
+                </div>
+              )}
+
+              {proyecto.data.area && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Área</span>
+                  <span class="valorMetadato">{proyecto.data.area}</span>
+                </div>
+              )}
+
+              {proyecto.data.financiacion && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Financiación</span>
+                  <span class="valorMetadato">
+                    {proyecto.data.financiacion.tipo}
+                    {proyecto.data.financiacion.entidad && (
+                      <>
+                        <br />
+                        <small>{proyecto.data.financiacion.entidad}</small>
+                      </>
+                    )}
+                  </span>
+                </div>
+              )}
+
+              {proyecto.data.estudiantes_involucrados && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Estudiantes</span>
+                  <span class="valorMetadato">{proyecto.data.estudiantes_involucrados}</span>
+                </div>
+              )}
+
+              {proyecto.data.sede && (
+                <div class="itemMetadato">
+                  <span class="etiquetaMetadato">Sede</span>
+                  <span class="valorMetadato">{proyecto.data.sede}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Listas de información adicional */}
+            {proyecto.data.instituciones && proyecto.data.instituciones.length > 0 && (
+              <div class="seccionLista">
+                <h5>Instituciones</h5>
+                <ul>
+                  {proyecto.data.instituciones.map((inst) => (
+                    <li>{inst}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {proyecto.data.colaboradores && proyecto.data.colaboradores.length > 0 && (
+              <div class="seccionLista">
+                <h5>Colaboradores</h5>
+                <ul>
+                  {proyecto.data.colaboradores.map((colab) => (
+                    <li>
+                      {colab.enlace ? (
+                        <a href={colab.enlace} target="_blank" rel="noopener noreferrer">
+                          {colab.nombre}
+                        </a>
+                      ) : (
+                        colab.nombre
+                      )}
+                      {colab.rol && <span class="textoSecundario"> — {colab.rol}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {proyecto.data.cursos_relacionados && proyecto.data.cursos_relacionados.length > 0 && (
+              <div class="seccionLista">
+                <h5>Cursos relacionados</h5>
+                <ul>
+                  {proyecto.data.cursos_relacionados.map((curso) => (
+                    <li>{curso}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {proyecto.data.productos && proyecto.data.productos.length > 0 && (
+              <div class="seccionLista">
+                <h5>Productos</h5>
+                <ul>
+                  {proyecto.data.productos.map((producto) => (
+                    <li>
+                      <span class="badgeProducto">{producto.tipo}</span>{' '}
+                      {producto.enlace ? (
+                        <a href={producto.enlace} target="_blank" rel="noopener noreferrer">
+                          {producto.titulo}
+                        </a>
+                      ) : (
+                        producto.titulo
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {proyecto.data.premios && proyecto.data.premios.length > 0 && (
+              <div class="seccionLista">
+                <h5>Premios y reconocimientos</h5>
+                <ul>
+                  {proyecto.data.premios.map((premio) => (
+                    <li>{premio}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {proyecto.data.menciones_prensa && proyecto.data.menciones_prensa.length > 0 && (
+              <div class="seccionLista">
+                <h5>Menciones en prensa</h5>
+                <ul>
+                  {proyecto.data.menciones_prensa.map((mencion) => (
+                    <li>
+                      {mencion.enlace ? (
+                        <a href={mencion.enlace} target="_blank" rel="noopener noreferrer">
+                          {mencion.titulo}
+                        </a>
+                      ) : (
+                        mencion.titulo
+                      )}{' '}
+                      <span class="textoSecundario">— {mencion.medio}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Enlaces */}
+            {((proyecto.data.enlaces && Object.keys(proyecto.data.enlaces).length > 0) || proyecto.data.instagram) && (
+              <div class="seccionEnlaces">
+                {proyecto.data.enlaces &&
+                  Object.entries(proyecto.data.enlaces).map(([key, url]) => (
+                    <a href={url} target="_blank" rel="noopener noreferrer" class="botonEnlace">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </a>
+                  ))}
+                {proyecto.data.instagram && !proyecto.data.enlaces?.instagram && (
+                  <a href={proyecto.data.instagram} target="_blank" rel="noopener noreferrer" class="botonEnlace">
+                    Instagram
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Videos */}
+            {proyecto.data.videos && proyecto.data.videos.length > 0 && (
+              <div class="seccionVideos">
+                {proyecto.data.videos.map((video) => {
+                  const videoId = obtenerIdVideo(video.id, video.plataforma);
+                  if (!videoId) return null;
+
+                  if (video.plataforma === 'youtube') {
+                    return (
+                      <div class="videoEmbed">
+                        <iframe
+                          width="560"
+                          height="315"
+                          loading="lazy"
+                          src={`https://www.youtube.com/embed/${videoId}`}
+                          title={video.titulo || proyecto.data.titulo}
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        />
+                      </div>
+                    );
+                  } else if (video.plataforma === 'vimeo') {
+                    return (
+                      <div class="videoEmbed">
+                        <iframe
+                          src={`https://player.vimeo.com/video/${videoId}`}
+                          width="560"
+                          height="315"
+                          frameborder="0"
+                          allow="autoplay; fullscreen; picture-in-picture"
+                          allowfullscreen
+                          title={video.titulo || proyecto.data.titulo}
+                        />
+                      </div>
+                    );
+                  } else if (video.plataforma === 'instagram') {
+                    return (
+                      <div class="videoEmbed instagram">
+                        <blockquote
+                          class="instagram-media"
+                          data-instgrm-permalink={videoId}
+                          data-instgrm-version="14"
+                        />
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+            )}
+
+            {/* Galería de imágenes */}
+            {proyecto.data.galeria && (
+              <div class="seccionGaleria">
+                <h5>Galería</h5>
+                <Galeria carpeta={carpetaGaleria} />
+              </div>
+            )}
+          </div>
+        </article>
+      );
+    })
+  }
+</div>
