@@ -118,7 +118,7 @@ const anos = Object.keys(evaluacionesPorAno).sort((a, b) => Number(b) - Number(a
       anos.map((ano) => (
         <div class="ano-seccion">
           <div class="periodos-lista">
-            {evaluacionesPorAno[ano].map((evaluacion) => (
+            {evaluacionesPorAno[Number(ano) as keyof typeof evaluacionesPorAno].map((evaluacion) => (
               <div class="periodo-card">
                 <div class="card-header">
                   <h5 class="periodo-titulo">{evaluacion.periodo}</h5>

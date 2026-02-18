@@ -24,7 +24,7 @@ function obtenerAñoDisplay(proyecto: (typeof proyectos)[0]) {
   return inicio ? `${inicio}` : '';
 }
 
-function obtenerIdVideo(url: string, plataforma?: string): string | null {
+function obtenerIdVideo(url: string): string | null {
   if (!url) return null;
 
   // YouTube
@@ -245,7 +245,7 @@ function obtenerIdVideo(url: string, plataforma?: string): string | null {
             {proyecto.data.videos && proyecto.data.videos.length > 0 && (
               <div class="seccionVideos">
                 {proyecto.data.videos.map((video) => {
-                  const videoId = obtenerIdVideo(video.id, video.plataforma);
+                  const videoId = obtenerIdVideo(video.id);
                   if (!videoId) return null;
 
                   if (video.plataforma === 'youtube') {
@@ -257,7 +257,6 @@ function obtenerIdVideo(url: string, plataforma?: string): string | null {
                           loading="lazy"
                           src={`https://www.youtube.com/embed/${videoId}`}
                           title={video.titulo || proyecto.data.titulo}
-                          frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           referrerpolicy="strict-origin-when-cross-origin"
                           allowfullscreen
@@ -271,7 +270,6 @@ function obtenerIdVideo(url: string, plataforma?: string): string | null {
                           src={`https://player.vimeo.com/video/${videoId}`}
                           width="560"
                           height="315"
-                          frameborder="0"
                           allow="autoplay; fullscreen; picture-in-picture"
                           allowfullscreen
                           title={video.titulo || proyecto.data.titulo}
