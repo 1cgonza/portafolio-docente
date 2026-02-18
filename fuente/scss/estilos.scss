@@ -195,23 +195,31 @@ main {
 
   h2 {
     font-size: 2.5em;
-    margin-bottom: 0;
+    padding-top: 3em;
+    margin-bottom: 0.5em;
   }
 
   h3 {
     border-bottom: 1px solid;
-    text-transform: uppercase;
     font-weight: 400;
     font-size: 1.8em;
+    padding-top: 2.5rem;
+    margin-bottom: 0.5em;
+  }
+
+  h4 {
+    padding-top: 1.5rem;
+    margin-bottom: 0.4em;
   }
 
   h5 {
     text-transform: uppercase;
-    text-decoration: underline;
+    padding-top: 0.75rem;
+    margin-bottom: 0.3em;
   }
 
   p {
-    line-height: 1.5;
+    line-height: 1.65;
     font-size: 1.2em;
   }
 
@@ -382,6 +390,7 @@ span.opcion-de-grado {
 .conetendorVideo {
   position: relative;
   width: 100%;
+  max-width: 820px;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 0.5em;
@@ -801,13 +810,6 @@ span.opcion-de-grado {
   gap: 3em;
   margin-top: 2em;
 
-  .introduccion {
-    p {
-      margin: 0;
-      line-height: 1.6;
-    }
-  }
-
   .evaluaciones-por-ano {
     > h4 {
       margin-bottom: 1.5em;
@@ -913,6 +915,7 @@ span.opcion-de-grado {
 
     img {
       width: 100%;
+      max-width: 820px;
       height: auto;
       display: block;
       margin-bottom: 0.75em;
@@ -923,13 +926,13 @@ span.opcion-de-grado {
       opacity: 0.7;
       margin: 0;
       line-height: 1.5;
-      text-align: center;
+      font-style: italic;
     }
   }
 
   // Sección de cursos
   .seccion-cursos {
-    border-left: 4px solid var(--colorFuente2);
+    border-left: 4px solid var(--colorFuente1);
     padding-left: 1em;
   }
 
@@ -943,7 +946,7 @@ span.opcion-de-grado {
     li {
       padding: 0.4em 0.8em;
       font-size: 0.9em;
-      border: 1px solid var(--colorFuente2);
+
       font-weight: 500;
 
       &::before {
@@ -952,44 +955,9 @@ span.opcion-de-grado {
     }
   }
 
-  // Aspectos positivos
-  .seccion-aspectos.positivos {
-    border-left: 4px solid var(--colorFuente2);
-    padding-left: 1em;
-  }
-
-  // Aspectos por mejorar
-  .seccion-aspectos.por-mejorar {
-    border-left: 4px solid var(--colorFuente2);
-    padding-left: 1em;
-    opacity: 0.8;
-  }
-
-  // Reflexión
-  .seccion-reflexion {
-    padding: 1.25em;
-    border-left: 4px solid var(--colorFuente2);
-    background-color: rgba(0, 0, 0, 0.02);
-
-    h6 {
-      margin-bottom: 0.75em;
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.7;
-      font-style: italic;
-      opacity: 0.9;
-    }
-  }
-
   // Responsive
   @media (max-width: 768px) {
     gap: 2em;
-
-    .introduccion {
-      padding-bottom: 1.5em;
-    }
 
     .periodo-titulo {
       font-size: 1.2em;
@@ -1015,5 +983,28 @@ span.opcion-de-grado {
         width: 100%;
       }
     }
+  }
+}
+
+// Secciones de prosa: ancho de lectura óptimo aplicado a elementos de texto,
+// no al contenedor, para que los componentes embebidos no queden restringidos.
+.seccion-prosa {
+  > p,
+  > h4,
+  > h5,
+  > h6,
+  > ul,
+  > ol,
+  > blockquote {
+    max-width: 72ch;
+  }
+}
+
+.grafica-historica {
+  img {
+    width: 100%;
+    max-width: 820px;
+    height: auto;
+    display: block;
   }
 }

@@ -11,7 +11,9 @@ const paginas = await getCollection('paginasDocencia').then((p) => p.sort((a, b)
       return (
         <>
           <h3 id={pagina.id}>{pagina.data.titulo}</h3>
-          <Content />
+          <div class={pagina.data.tipo === 'prosa' ? 'seccion-prosa' : undefined}>
+            <Content />
+          </div>
         </>
       );
     })

@@ -8,6 +8,7 @@ const paginas = defineCollection({
       titulo: z.string(),
       descripcion: z.string().optional(),
       img: image().optional(),
+      tipo: z.string().optional(),
     }),
 });
 
@@ -16,6 +17,7 @@ const paginasDocencia = defineCollection({
   schema: () =>
     z.object({
       titulo: z.string(),
+      tipo: z.string().optional(),
     }),
 });
 

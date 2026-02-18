@@ -47,7 +47,7 @@ const paginasDocencia = await getCollection('paginasDocencia').then((p) => p.sor
         return (
           <>
             <h2 id={pagina.id}>{pagina.data.titulo}</h2>
-            <div>
+            <div class={pagina.data.tipo === 'prosa' ? 'seccion-prosa' : undefined}>
               <Content />
             </div>
           </>
