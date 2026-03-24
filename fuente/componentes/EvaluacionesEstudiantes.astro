@@ -146,7 +146,11 @@ const cursosPorPeriodo = [...cursosPregrado, ...cursosMaestria].reduce(
                   <div class="card-header">
                     <h5 class="periodo-titulo">{evaluacion.periodo}</h5>
                     <div class="documentos-enlaces">
-                      <a href={`/pdfs/evaluaciones/${evaluacion.principal}`} target="_blank" class="link-documento principal">
+                      <a
+                        href={`/pdfs/evaluaciones/${evaluacion.principal}`}
+                        target="_blank"
+                        class="link-documento principal"
+                      >
                         Reporte Principal
                       </a>
                       {evaluacion.comparado && (
@@ -164,9 +168,13 @@ const cursosPorPeriodo = [...cursosPregrado, ...cursosMaestria].reduce(
                   <div class="card-body">
                     {evaluacion.imagen && (
                       <div class="seccion-imagen">
-                        <img src={evaluacion.imagen} alt={`Grafica comparativa de evaluaciones - ${evaluacion.periodo}`} />
+                        <img
+                          src={evaluacion.imagen}
+                          alt={`Grafica comparativa de evaluaciones - ${evaluacion.periodo}`}
+                        />
                         <p class="descripcion-imagen">
-                          Comparacion de promedios: Juan Camilo Gonzalez vs Facultad de Artes y Humanidades vs Universidad
+                          Comparacion de promedios: Juan Camilo Gonzalez vs Facultad de Artes y Humanidades vs
+                          Universidad
                         </p>
                       </div>
                     )}
