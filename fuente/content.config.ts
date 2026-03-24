@@ -1,5 +1,6 @@
 import { glob } from 'astro/loaders';
-import { z, defineCollection } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 
 const paginas = defineCollection({
   loader: glob({ pattern: '*.{md,mdx}', base: './fuente/contenido' }),
@@ -84,6 +85,14 @@ const proyectosInvestigacion = defineCollection({
       slug: z.string().optional(),
       año_inicio: z.number(),
       año_fin: z.number().optional(),
+      fecha_inicio: z
+        .string()
+        .regex(/^\d{4}-\d{2}(-\d{2})?$/, 'Usa formato YYYY-MM o YYYY-MM-DD')
+        .optional(),
+      fecha_fin: z
+        .string()
+        .regex(/^\d{4}-\d{2}(-\d{2})?$/, 'Usa formato YYYY-MM o YYYY-MM-DD')
+        .optional(),
       estado: z.enum(['finalizado', 'en curso', 'publicado']).optional(),
       // Clasificación
       tipo: z.enum(['investigación', 'creación', 'investigación-creación']).optional(),
@@ -102,16 +111,33 @@ const proyectosInvestigacion = defineCollection({
       instituciones: z.array(z.string()).optional(),
       // Financiación
       financiacion: z
-        .object({
-          tipo: z.string().optional(),
-          entidad: z.string().optional(),
-        })
+        .union([
+          z.object({
+            tipo: z.enum(['interna', 'externa', 'FAPA', 'institucional']),
+            entidad: z.string().optional(),
+          }),
+          z.array(
+            z.object({
+              tipo: z.enum(['interna', 'externa', 'FAPA', 'institucional']),
+              entidad: z.string().optional(),
+            })
+          ),
+        ])
         .optional(),
       // Productos y reconocimientos
       productos: z
         .array(
           z.object({
             tipo: z.string(),
+            titulo: z.string(),
+            enlace: z.string().optional(),
+          })
+        )
+        .optional(),
+      exhibiciones: z
+        .array(
+          z.object({
+            tipo: z.string().optional(),
             titulo: z.string(),
             enlace: z.string().optional(),
           })
@@ -143,10 +169,8 @@ const proyectosInvestigacion = defineCollection({
         )
         .optional(),
       enlaces: z
-        .record(z.string()) // Permite cualquier clave con valor string
+        .record(z.string(), z.string()) // Zod 4 requiere definir clave y valor
         .optional(),
-      // SEO
-      descripcion: z.string().optional(),
       // Compatibilidad con estructura antigua
       año: z.number().optional(),
       sede: z.string().optional(),
