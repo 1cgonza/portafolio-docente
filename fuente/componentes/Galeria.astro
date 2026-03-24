@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import { obtenerImagenesPorCarpeta } from '@/utilidades/imagenes';
 
 interface Props {
   carpeta: string;
@@ -10,34 +10,17 @@ interface Props {
 
 const { carpeta, limite, variante = 'masonry' } = Astro.props;
 
-// Importar imágenes como ImageMetadata para obtener dimensiones reales
-const todasLasImagenes = import.meta.glob('../imagenes/**/*.{jpg,jpeg,png,webp}', { eager: false });
-
-// Procesar las imágenes de forma asíncrona para obtener metadatos
-const imagenesPrometidas = Object.entries(todasLasImagenes)
-  .filter(([ruta]) => ruta.includes(`/imagenes/${carpeta}/`))
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(async ([ruta, importarImagenes]) => {
-    const modulosImagenes = (await importarImagenes()) as { default: ImageMetadata };
-    const metadatos = modulosImagenes.default;
-    return {
-      imagen: metadatos, // Conservamos el objeto ImageMetadata completo
-      src: metadatos.src,
-      width: metadatos.width,
-      height: metadatos.height,
-      alt:
-        ruta
-          .split('/')
-          .pop()
-          ?.replace(/\.(jpg|jpeg|png|webp)$/, '') ?? 'Imagen',
-    };
-  });
-
-const imagenes = await Promise.all(imagenesPrometidas);
+const imagenes = obtenerImagenesPorCarpeta(carpeta).map((imagen) => ({
+  imagen: imagen.metadata,
+  src: imagen.src,
+  width: imagen.width,
+  height: imagen.height,
+  alt: imagen.alt,
+}));
 ---
 
 {
-  imagenes && imagenes.length > 0 && (
+  imagenes.length > 0 && (
     <div class={`galeria galeria--${variante}`} data-limite={limite} data-total={imagenes.length}>
       {imagenes.map((img, index) => (
         <a
@@ -54,4 +37,4 @@ const imagenes = await Promise.all(imagenesPrometidas);
     </div>
   )
 }
-{(!imagenes || imagenes.length === 0) && <p>No hay imágenes para mostrar en la carpeta: {carpeta}</p>}
+{imagenes.length === 0 && <p>No hay imagenes para mostrar en la carpeta: {carpeta}</p>}

@@ -171,6 +171,8 @@ const cursosPorPeriodo = [...cursosPregrado, ...cursosMaestria].reduce(
                         <img
                           src={evaluacion.imagen}
                           alt={`Grafica comparativa de evaluaciones - ${evaluacion.periodo}`}
+                          loading="lazy"
+                          decoding="async"
                         />
                         <p class="descripcion-imagen">
                           Comparacion de promedios: Juan Camilo Gonzalez vs Facultad de Artes y Humanidades vs

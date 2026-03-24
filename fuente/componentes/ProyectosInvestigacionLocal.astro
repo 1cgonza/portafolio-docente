@@ -30,6 +30,14 @@ type SectionItem = {
 
 const proyectos = await getCollection('proyectosInvestigacion');
 
+const ANO = 'a\u00f1o';
+const ANO_INICIO = 'a\u00f1o_inicio';
+const ANO_FIN = 'a\u00f1o_fin';
+
+function obtenerAno(proyecto: (typeof proyectos)[0], llave: string) {
+  return proyecto.data[llave as keyof typeof proyecto.data] as number | undefined;
+}
+
 function obtenerClaveFecha(fecha: string | undefined, ano: number | undefined, tipo: 'inicio' | 'fin') {
   if (fecha) {
     const [anoTexto, mesTexto, diaTexto] = fecha.split('-');
@@ -46,9 +54,33 @@ function obtenerClaveFecha(fecha: string | undefined, ano: number | undefined, t
   return tipo === 'fin' ? ano * 10000 + 1231 : ano * 10000 + 101;
 }
 
+function obtenerAnoInicio(proyecto: (typeof proyectos)[0]) {
+  return obtenerAno(proyecto, ANO_INICIO) || obtenerAno(proyecto, ANO);
+}
+
+function obtenerAnoFin(proyecto: (typeof proyectos)[0]) {
+  return obtenerAno(proyecto, ANO_FIN);
+}
+
+function estaEnCursoSinFechaFinal(proyecto: (typeof proyectos)[0]) {
+  return proyecto.data.estado === 'en curso' && !proyecto.data.fecha_fin && !obtenerAnoFin(proyecto);
+}
+
+function obtenerClaveFinParaOrden(proyecto: (typeof proyectos)[0]) {
+  if (estaEnCursoSinFechaFinal(proyecto)) {
+    return 99991231;
+  }
+
+  return obtenerClaveFecha(proyecto.data.fecha_fin, obtenerAnoFin(proyecto) || obtenerAnoInicio(proyecto), 'fin');
+}
+
+function obtenerClaveInicioParaOrden(proyecto: (typeof proyectos)[0]) {
+  return obtenerClaveFecha(proyecto.data.fecha_inicio, obtenerAnoInicio(proyecto), 'inicio');
+}
+
 function obtenerPeriodoDisplay(proyecto: (typeof proyectos)[0]) {
-  const inicioBase = proyecto.data.año_inicio || proyecto.data.año;
-  const finBase = proyecto.data.año_fin;
+  const inicioBase = obtenerAnoInicio(proyecto);
+  const finBase = obtenerAnoFin(proyecto);
   const inicio = inicioBase ? `${inicioBase}` : '';
   const fin = finBase ? `${finBase}` : '';
 
@@ -109,14 +141,10 @@ const resumenSeccion = (() => {
 })();
 
 proyectos.sort((a, b) => {
-  const finA = obtenerClaveFecha(a.data.fecha_fin, a.data.año_fin || a.data.año_inicio || a.data.año, 'fin');
-  const finB = obtenerClaveFecha(b.data.fecha_fin, b.data.año_fin || b.data.año_inicio || b.data.año, 'fin');
-  const diffFin = finB - finA;
+  const diffFin = obtenerClaveFinParaOrden(b) - obtenerClaveFinParaOrden(a);
   if (diffFin !== 0) return diffFin;
 
-  const inicioA = obtenerClaveFecha(a.data.fecha_inicio, a.data.año_inicio || a.data.año, 'inicio');
-  const inicioB = obtenerClaveFecha(b.data.fecha_inicio, b.data.año_inicio || b.data.año, 'inicio');
-  const diffInicio = inicioB - inicioA;
+  const diffInicio = obtenerClaveInicioParaOrden(b) - obtenerClaveInicioParaOrden(a);
   if (diffInicio !== 0) return diffInicio;
 
   return a.data.titulo.localeCompare(b.data.titulo, 'es');
@@ -125,8 +153,8 @@ proyectos.sort((a, b) => {
 
 <section class="resumenProyectosInvestigacion" aria-labelledby="resumen-proyectos-investigacion">
   <div class="resumenProyectosInvestigacion__encabezado">
-    <h4 id="resumen-proyectos-investigacion">Resumen de la sección</h4>
-    <p>Conteo automático de proyectos, apoyos y resultados registrados en esta página.</p>
+    <h4 id="resumen-proyectos-investigacion">Resumen de la seccion</h4>
+    <p>Conteo automatico de proyectos, apoyos y resultados registrados en esta pagina.</p>
   </div>
   <div class="resumenProyectosInvestigacion__grid">
     {
@@ -159,9 +187,9 @@ proyectos.sort((a, b) => {
       if (proyecto.data.area) {
         metadatos.push({ etiqueta: 'Area', valor: proyecto.data.area });
       }
-      normalizarFinanciacion(proyecto.data.financiacion).forEach((fuente, index) => {
+      normalizarFinanciacion(proyecto.data.financiacion).forEach((fuente) => {
         metadatos.push({
-          etiqueta: index === 0 ? 'Financiacion' : 'Financiacion',
+          etiqueta: 'Financiacion',
           valor: formatearTipoFinanciacion(fuente.tipo),
           detalle: fuente.entidad,
         });

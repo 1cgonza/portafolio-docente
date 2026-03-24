@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import Galeria from './Galeria.astro';
+import { obtenerPrimeraImagenDeCarpeta } from '@/utilidades/imagenes';
 
 interface MetaItem {
   etiqueta: string;
@@ -59,26 +60,7 @@ const {
   videos = [],
 } = Astro.props;
 
-const imagenesGaleria = carpetaGaleria
-  ? Object.entries(
-      import.meta.glob('../imagenes/**/*.{jpg,jpeg,png,webp}', {
-        eager: true,
-        import: 'default',
-      })
-    )
-      .filter(([ruta]) => ruta.includes(`/imagenes/${carpetaGaleria}/`))
-      .sort(([rutaA], [rutaB]) => rutaA.localeCompare(rutaB))
-      .map(([ruta, metadata]) => {
-        const imagenGaleria = metadata as ImageMetadata;
-        return {
-          metadata: imagenGaleria,
-          ruta,
-          src: imagenGaleria.src,
-          width: imagenGaleria.width,
-          height: imagenGaleria.height,
-        };
-      })
-  : [];
+const primeraImagenGaleria = carpetaGaleria ? obtenerPrimeraImagenDeCarpeta(carpetaGaleria) : undefined;
 
 const vistaPrevia = imagen
   ? {
@@ -87,11 +69,11 @@ const vistaPrevia = imagen
       height: imagen.height,
       alt: altImagen || titulo,
     }
-  : imagenesGaleria[0]
+  : primeraImagenGaleria
     ? {
-        src: imagenesGaleria[0].src,
-        width: imagenesGaleria[0].width,
-        height: imagenesGaleria[0].height,
+        src: primeraImagenGaleria.src,
+        width: primeraImagenGaleria.width,
+        height: primeraImagenGaleria.height,
         alt: altImagen || titulo,
       }
     : undefined;
@@ -254,6 +236,7 @@ const orientacionImagen = obtenerOrientacionImagen();
                     src={`https://player.vimeo.com/video/${videoId}`}
                     width="560"
                     height="315"
+                    loading="lazy"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowfullscreen
                     title={video.titulo || titulo}

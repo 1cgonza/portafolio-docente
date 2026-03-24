@@ -8,15 +8,15 @@
 # ==================== BASICOS ====================
 titulo: 'Titulo del proyecto'
 slug: 'nombre-del-proyecto'
-año_inicio: 2024
-año_fin: 2025
+"a\u00f1o_inicio": 2024
+"a\u00f1o_fin": 2025
 fecha_inicio: '2024-02'
 fecha_fin: '2025-12'
 estado: finalizado # finalizado | en curso | publicado
 
 # ==================== CLASIFICACION ====================
-tipo: creación # investigacion | creacion | investigacion-creacion
-area: 'narrativas digitales'
+tipo: "creaci\u00f3n" # investigacion | creacion | investigacion-creacion
+area: 'Narrativas digitales'
 
 # ==================== ROL Y COLABORACION ====================
 rol: Director
@@ -34,36 +34,37 @@ instituciones:
 # - FAPA
 # - institucional
 #
-# Puedes usar un solo apoyo:
-financiacion:
-  tipo: 'FAPA'
-  entidad: 'Vicerrectoría de Investigación y Creación'
-
-# O varias fuentes:
+# Puedes usar una sola fuente:
 # financiacion:
-#   - tipo: 'FAPA'
-#     entidad: 'Vicerrectoría de Investigación y Creación'
-#   - tipo: 'externa'
-#     entidad: 'Nombre de la entidad'
+#   tipo: 'FAPA'
+#   entidad: 'Vicerrectoria de Investigacion y Creacion'
+#
+# O varias fuentes:
+financiacion:
+  - tipo: 'externa'
+    entidad: 'Nombre de la entidad'
+  - tipo: 'FAPA'
+    entidad: 'Vicerrectoria de Investigacion y Creacion'
 
 # ==================== PRODUCTOS Y RECONOCIMIENTOS ====================
 productos:
-  - tipo: publicación
+  - tipo: 'publicacion'
     titulo: 'Titulo del producto'
     enlace: 'https://...'
 
 exhibiciones: []
 # Ejemplo:
 # exhibiciones:
-#   - tipo: selección oficial
+#   - tipo: 'seleccion oficial'
 #     titulo: 'Nombre del festival o muestra'
 #     enlace: 'https://...'
 
 premios: []
 # Ejemplo:
-# premios:
-#   - 'Nombre del premio - Entidad - Año'
-
+# menciones_prensa:
+#   - titulo: 'Titulo del articulo'
+#     medio: 'Nombre del medio'
+#     enlace: 'https://...'
 menciones_prensa: []
 # Ejemplo:
 # menciones_prensa:
@@ -81,14 +82,12 @@ cursos_relacionados: []
 # ==================== MEDIOS ====================
 # imagen_principal: ./imgs/imagen.jpg
 galeria: false
-
 videos: []
 # Ejemplo:
 # videos:
 #   - plataforma: youtube
 #     id: 'ID_del_video'
 #     titulo: 'Titulo descriptivo del video'
-
 enlaces: {}
 # Ejemplo:
 # enlaces:
@@ -97,12 +96,6 @@ enlaces: {}
 #   instagram: 'https://instagram.com/...'
 ---
 
-## Titulo de seccion (opcional)
+## Titulo de seccion
 
 Aqui va el contenido detallado del proyecto en Markdown.
-
-- Contexto y motivacion
-- Metodologia
-- Resultados
-- Impacto
-- Conclusiones
