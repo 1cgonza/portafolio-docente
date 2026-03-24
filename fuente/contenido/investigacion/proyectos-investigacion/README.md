@@ -31,6 +31,7 @@ proyectos-investigacion/
    ---
    titulo: 'Nombre del proyecto'
    año_inicio: 2024
+   fecha_fin: '2024-11'
    # ... otros campos
    ---
    ```
@@ -47,10 +48,11 @@ proyectos-investigacion/
 ### Campos opcionales (recomendados)
 
 - `año_fin`: Año de finalización (omitir si está en curso)
+- `fecha_inicio`: Fecha más precisa en formato `YYYY-MM` o `YYYY-MM-DD`
+- `fecha_fin`: Fecha más precisa en formato `YYYY-MM` o `YYYY-MM-DD`
 - `estado`: finalizado | en curso | publicado
 - `tipo`: investigación | creación | investigación-creación
 - `rol`: Tu rol en el proyecto (Director, Co-investigador, etc.)
-- `descripcion`: Breve descripción de 1-2 líneas
 
 ### Campos complementarios
 
@@ -60,6 +62,7 @@ Ver `_PLANTILLA.mdx` para la lista completa de campos disponibles:
 - Instituciones
 - Financiación
 - Productos derivados
+- Exhibiciones y selecciones
 - Premios
 - Menciones en prensa
 - Conexión con docencia
@@ -124,11 +127,33 @@ videos:
 2. **Optimiza las imágenes**: Usa formatos web (WebP, JPEG optimizado) y tamaños razonables (< 500KB)
 3. **Completa los metadatos**: Mientras más campos completes, más rico será el contexto del proyecto
 4. **Conecta con docencia**: Si el proyecto involucró estudiantes o cursos, documéntalo en los campos correspondientes
-5. **Productos derivados**: Lista publicaciones, exhibiciones, premios - son importantes para el ascenso
-6. **Financiación**: Documenta el origen de los recursos, especialmente si son externos
+5. **Productos derivados**: Reserva `productos` para obras, publicaciones, instalaciones, software, bases de datos u otros resultados del proyecto
+6. **Exhibiciones y selecciones**: Usa `exhibiciones` para festivales, muestras, selecciones oficiales o circulación pública de la obra
+7. **Financiación**: Documenta el origen de los recursos, especialmente si son externos
+
+Puedes registrar `financiacion` como un objeto único o como una lista de apoyos.
+
+Tipos recomendados para `financiacion.tipo`:
+
+- `interna`
+- `externa`
+- `FAPA`
+- `institucional`
+
+Ejemplo:
+
+```yaml
+financiacion:
+  - tipo: 'FAPA'
+    entidad: 'Vicerrectoría de Investigación y Creación'
+  - tipo: 'externa'
+    entidad: 'Nombre de la entidad'
+```
 
 ## Ver los proyectos
 
 Los proyectos se muestran automáticamente en `/04_produccion.mdx` usando el componente `<ProyectosInvestigacionLocal />`.
 
-El orden de visualización es por año de inicio, del más reciente al más antiguo.
+El orden de visualización usa primero `fecha_fin` si existe, luego `año_fin`, y después desempata con `fecha_inicio` y `año_inicio`.
+
+Si dos proyectos terminan el mismo año, usar `fecha_fin` te permite reflejar correctamente cuál cerró más tarde dentro de ese año.

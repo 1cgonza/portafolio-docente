@@ -1,305 +1,264 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Galeria from './Galeria.astro';
+import TarjetaMedia from './TarjetaMedia.astro';
+
+type MetaItem = {
+  etiqueta: string;
+  valor: string;
+  detalle?: string;
+};
+
+type LinkItem = {
+  etiqueta: string;
+  url: string;
+};
+
+type FundingItem = {
+  tipo: 'interna' | 'externa' | 'FAPA' | 'institucional';
+  entidad?: string;
+};
+
+type SectionItem = {
+  titulo: string;
+  items: Array<{
+    titulo: string;
+    url?: string;
+    etiqueta?: string;
+    meta?: string;
+  }>;
+};
 
 const proyectos = await getCollection('proyectosInvestigacion');
 
-// Ordenar por año de inicio, más reciente primero
+function obtenerClaveFecha(fecha: string | undefined, ano: number | undefined, tipo: 'inicio' | 'fin') {
+  if (fecha) {
+    const [anoTexto, mesTexto, diaTexto] = fecha.split('-');
+    const anoNormalizado = Number(anoTexto);
+    const mesNormalizado = Number(mesTexto);
+    const diaNormalizado = diaTexto ? Number(diaTexto) : tipo === 'fin' ? 31 : 1;
+
+    if (Number.isFinite(anoNormalizado) && Number.isFinite(mesNormalizado) && Number.isFinite(diaNormalizado)) {
+      return anoNormalizado * 10000 + mesNormalizado * 100 + diaNormalizado;
+    }
+  }
+
+  if (!ano) return 0;
+  return tipo === 'fin' ? ano * 10000 + 1231 : ano * 10000 + 101;
+}
+
+function obtenerPeriodoDisplay(proyecto: (typeof proyectos)[0]) {
+  const inicioBase = proyecto.data.año_inicio || proyecto.data.año;
+  const finBase = proyecto.data.año_fin;
+  const inicio = inicioBase ? `${inicioBase}` : '';
+  const fin = finBase ? `${finBase}` : '';
+
+  if (inicio && fin && inicio !== fin) return `${inicio} - ${fin}`;
+  if (inicio && proyecto.data.estado === 'en curso') return `${inicio} - presente`;
+  return fin || inicio;
+}
+
+function formatearEtiquetaEnlace(key: string) {
+  return key.replace(/_/g, ' ');
+}
+
+function normalizarFinanciacion(financiacion: FundingItem | FundingItem[] | undefined): FundingItem[] {
+  if (!financiacion) return [];
+  return Array.isArray(financiacion) ? financiacion : [financiacion];
+}
+
+function formatearTipoFinanciacion(tipo: FundingItem['tipo']) {
+  if (tipo === 'FAPA') return 'FAPA';
+  return tipo.charAt(0).toUpperCase() + tipo.slice(1);
+}
+
+const resumenSeccion = (() => {
+  const conteos = {
+    proyectos: proyectos.length,
+    interna: 0,
+    externa: 0,
+    fapa: 0,
+    institucional: 0,
+    productos: 0,
+    exhibiciones: 0,
+    premios: 0,
+  };
+
+  proyectos.forEach((proyecto) => {
+    normalizarFinanciacion(proyecto.data.financiacion).forEach((fuente) => {
+      if (fuente.tipo === 'interna') conteos.interna += 1;
+      if (fuente.tipo === 'externa') conteos.externa += 1;
+      if (fuente.tipo === 'FAPA') conteos.fapa += 1;
+      if (fuente.tipo === 'institucional') conteos.institucional += 1;
+    });
+
+    conteos.productos += proyecto.data.productos?.length || 0;
+    conteos.exhibiciones += proyecto.data.exhibiciones?.length || 0;
+    conteos.premios += proyecto.data.premios?.length || 0;
+  });
+
+  return [
+    { etiqueta: 'Proyectos', valor: conteos.proyectos },
+    { etiqueta: 'Financiaciones internas', valor: conteos.interna },
+    { etiqueta: 'Financiaciones externas', valor: conteos.externa },
+    { etiqueta: 'FAPA', valor: conteos.fapa },
+    { etiqueta: 'Apoyos institucionales', valor: conteos.institucional },
+    { etiqueta: 'Productos', valor: conteos.productos },
+    { etiqueta: 'Exhibiciones', valor: conteos.exhibiciones },
+    { etiqueta: 'Premios', valor: conteos.premios },
+  ];
+})();
+
 proyectos.sort((a, b) => {
-  const añoA = a.data.año_inicio || a.data.año || 0;
-  const añoB = b.data.año_inicio || b.data.año || 0;
-  return añoB - añoA;
+  const finA = obtenerClaveFecha(a.data.fecha_fin, a.data.año_fin || a.data.año_inicio || a.data.año, 'fin');
+  const finB = obtenerClaveFecha(b.data.fecha_fin, b.data.año_fin || b.data.año_inicio || b.data.año, 'fin');
+  const diffFin = finB - finA;
+  if (diffFin !== 0) return diffFin;
+
+  const inicioA = obtenerClaveFecha(a.data.fecha_inicio, a.data.año_inicio || a.data.año, 'inicio');
+  const inicioB = obtenerClaveFecha(b.data.fecha_inicio, b.data.año_inicio || b.data.año, 'inicio');
+  const diffInicio = inicioB - inicioA;
+  if (diffInicio !== 0) return diffInicio;
+
+  return a.data.titulo.localeCompare(b.data.titulo, 'es');
 });
-
-function obtenerAñoDisplay(proyecto: (typeof proyectos)[0]) {
-  const inicio = proyecto.data.año_inicio || proyecto.data.año;
-  const fin = proyecto.data.año_fin;
-
-  if (inicio && fin && inicio !== fin) {
-    return `${inicio} - ${fin}`;
-  }
-  if (inicio && proyecto.data.estado === 'en curso') {
-    return `${inicio} - presente`;
-  }
-  return inicio ? `${inicio}` : '';
-}
-
-function obtenerIdVideo(url: string): string | null {
-  if (!url) return null;
-
-  // YouTube
-  const youtubeMatch =
-    url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\?\/]+)/) ||
-    url.match(/^([a-zA-Z0-9_-]{11})$/);
-  if (youtubeMatch) return youtubeMatch[1];
-
-  // Vimeo
-  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/) || url.match(/^\d+$/);
-  if (vimeoMatch) return vimeoMatch[1];
-
-  // Instagram (ya viene como URL completa)
-  if (url.includes('instagram.com')) return url;
-
-  return url;
-}
 ---
 
-<div class="proyectosInvestigacion">
+<section class="resumenProyectosInvestigacion" aria-labelledby="resumen-proyectos-investigacion">
+  <div class="resumenProyectosInvestigacion__encabezado">
+    <h4 id="resumen-proyectos-investigacion">Resumen de la sección</h4>
+    <p>Conteo automático de proyectos, apoyos y resultados registrados en esta página.</p>
+  </div>
+  <div class="resumenProyectosInvestigacion__grid">
+    {
+      resumenSeccion.map((item) => (
+        <div class="resumenProyectosInvestigacion__item">
+          <span class="resumenProyectosInvestigacion__valor">{item.valor}</span>
+          <span class="resumenProyectosInvestigacion__etiqueta">{item.etiqueta}</span>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<div class="listadoTarjetasMedia proyectosInvestigacion">
   {
     proyectos.map(async (proyecto) => {
       const { Content } = await render(proyecto);
-      const año = obtenerAñoDisplay(proyecto);
       const carpetaGaleria = proyecto.data.slug || proyecto.id.replace('.mdx', '').replace('.md', '');
 
+      const metadatos: MetaItem[] = [];
+      const secciones: SectionItem[] = [];
+      const enlaces: LinkItem[] = [];
+
+      if (proyecto.data.tipo) {
+        metadatos.push({ etiqueta: 'Tipo', valor: proyecto.data.tipo });
+      }
+      if (proyecto.data.rol) {
+        metadatos.push({ etiqueta: 'Rol', valor: proyecto.data.rol });
+      }
+      if (proyecto.data.area) {
+        metadatos.push({ etiqueta: 'Area', valor: proyecto.data.area });
+      }
+      normalizarFinanciacion(proyecto.data.financiacion).forEach((fuente, index) => {
+        metadatos.push({
+          etiqueta: index === 0 ? 'Financiacion' : 'Financiacion',
+          valor: formatearTipoFinanciacion(fuente.tipo),
+          detalle: fuente.entidad,
+        });
+      });
+      if (typeof proyecto.data.estudiantes_involucrados === 'number') {
+        metadatos.push({ etiqueta: 'Estudiantes', valor: `${proyecto.data.estudiantes_involucrados}` });
+      }
+      if (proyecto.data.sede) {
+        metadatos.push({ etiqueta: 'Sede', valor: proyecto.data.sede });
+      }
+
+      if (proyecto.data.instituciones?.length) {
+        secciones.push({
+          titulo: 'Instituciones',
+          items: proyecto.data.instituciones.map((institucion) => ({ titulo: institucion })),
+        });
+      }
+      if (proyecto.data.colaboradores?.length) {
+        secciones.push({
+          titulo: 'Colaboradores',
+          items: proyecto.data.colaboradores.map((colaborador) => ({
+            titulo: colaborador.nombre,
+            url: colaborador.enlace,
+            meta: colaborador.rol,
+          })),
+        });
+      }
+      if (proyecto.data.cursos_relacionados?.length) {
+        secciones.push({
+          titulo: 'Cursos relacionados',
+          items: proyecto.data.cursos_relacionados.map((curso) => ({ titulo: curso })),
+        });
+      }
+      if (proyecto.data.exhibiciones?.length) {
+        secciones.push({
+          titulo: 'Exhibiciones y selecciones',
+          items: proyecto.data.exhibiciones.map((exhibicion) => ({
+            titulo: exhibicion.titulo,
+            url: exhibicion.enlace,
+            etiqueta: exhibicion.tipo,
+          })),
+        });
+      }
+      if (proyecto.data.productos?.length) {
+        secciones.push({
+          titulo: 'Productos',
+          items: proyecto.data.productos.map((producto) => ({
+            titulo: producto.titulo,
+            url: producto.enlace,
+            etiqueta: producto.tipo,
+          })),
+        });
+      }
+      if (proyecto.data.premios?.length) {
+        secciones.push({
+          titulo: 'Premios y reconocimientos',
+          items: proyecto.data.premios.map((premio) => ({ titulo: premio })),
+        });
+      }
+      if (proyecto.data.menciones_prensa?.length) {
+        secciones.push({
+          titulo: 'Menciones en prensa',
+          items: proyecto.data.menciones_prensa.map((mencion) => ({
+            titulo: mencion.titulo,
+            url: mencion.enlace,
+            meta: mencion.medio,
+          })),
+        });
+      }
+
+      if (proyecto.data.enlaces) {
+        for (const [key, url] of Object.entries(proyecto.data.enlaces)) {
+          enlaces.push({
+            etiqueta: formatearEtiquetaEnlace(key),
+            url,
+          });
+        }
+      }
+      if (proyecto.data.instagram && !proyecto.data.enlaces?.instagram) {
+        enlaces.push({ etiqueta: 'Instagram', url: proyecto.data.instagram });
+      }
+
       return (
-        <article class="tarjetaProyecto" id={carpetaGaleria}>
-          {/* Imagen principal */}
-          {proyecto.data.imagen_principal && (
-            <div class="imagenDestacada">
-              <img src={proyecto.data.imagen_principal.src} alt={proyecto.data.titulo} />
-            </div>
-          )}
-
-          <div class="contenidoTarjeta">
-            {/* Header con título y año */}
-            <header class="headerProyecto">
-              <div class="tituloYAño">
-                <h3 class="tituloProyecto">{proyecto.data.titulo}</h3>
-                {año && <span class="añoProyecto">{año}</span>}
-              </div>
-              {proyecto.data.estado && (
-                <span class={`badge badge-${proyecto.data.estado.replace(' ', '-')}`}>{proyecto.data.estado}</span>
-              )}
-            </header>
-
-            {/* Contenido del proyecto */}
-            <div class="contenidoProyecto">
-              <Content />
-            </div>
-
-            {/* Metadatos en grid compacto */}
-            <div class="gridMetadatos">
-              {proyecto.data.tipo && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Tipo</span>
-                  <span class="valorMetadato">{proyecto.data.tipo}</span>
-                </div>
-              )}
-
-              {proyecto.data.rol && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Rol</span>
-                  <span class="valorMetadato">{proyecto.data.rol}</span>
-                </div>
-              )}
-
-              {proyecto.data.area && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Área</span>
-                  <span class="valorMetadato">{proyecto.data.area}</span>
-                </div>
-              )}
-
-              {proyecto.data.financiacion && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Financiación</span>
-                  <span class="valorMetadato">
-                    {proyecto.data.financiacion.tipo}
-                    {proyecto.data.financiacion.entidad && (
-                      <>
-                        <br />
-                        <small>{proyecto.data.financiacion.entidad}</small>
-                      </>
-                    )}
-                  </span>
-                </div>
-              )}
-
-              {proyecto.data.estudiantes_involucrados && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Estudiantes</span>
-                  <span class="valorMetadato">{proyecto.data.estudiantes_involucrados}</span>
-                </div>
-              )}
-
-              {proyecto.data.sede && (
-                <div class="itemMetadato">
-                  <span class="etiquetaMetadato">Sede</span>
-                  <span class="valorMetadato">{proyecto.data.sede}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Listas de información adicional */}
-            {proyecto.data.instituciones && proyecto.data.instituciones.length > 0 && (
-              <div class="seccionLista">
-                <h5>Instituciones</h5>
-                <ul>
-                  {proyecto.data.instituciones.map((inst) => (
-                    <li>{inst}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {proyecto.data.colaboradores && proyecto.data.colaboradores.length > 0 && (
-              <div class="seccionLista">
-                <h5>Colaboradores</h5>
-                <ul>
-                  {proyecto.data.colaboradores.map((colab) => (
-                    <li>
-                      {colab.enlace ? (
-                        <a href={colab.enlace} target="_blank" rel="noopener noreferrer">
-                          {colab.nombre}
-                        </a>
-                      ) : (
-                        colab.nombre
-                      )}
-                      {colab.rol && <span class="textoSecundario"> — {colab.rol}</span>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {proyecto.data.cursos_relacionados && proyecto.data.cursos_relacionados.length > 0 && (
-              <div class="seccionLista">
-                <h5>Cursos relacionados</h5>
-                <ul>
-                  {proyecto.data.cursos_relacionados.map((curso) => (
-                    <li>{curso}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {proyecto.data.productos && proyecto.data.productos.length > 0 && (
-              <div class="seccionLista">
-                <h5>Productos</h5>
-                <ul>
-                  {proyecto.data.productos.map((producto) => (
-                    <li>
-                      <span class="badgeProducto">{producto.tipo}</span>{' '}
-                      {producto.enlace ? (
-                        <a href={producto.enlace} target="_blank" rel="noopener noreferrer">
-                          {producto.titulo}
-                        </a>
-                      ) : (
-                        producto.titulo
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {proyecto.data.premios && proyecto.data.premios.length > 0 && (
-              <div class="seccionLista">
-                <h5>Premios y reconocimientos</h5>
-                <ul>
-                  {proyecto.data.premios.map((premio) => (
-                    <li>{premio}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {proyecto.data.menciones_prensa && proyecto.data.menciones_prensa.length > 0 && (
-              <div class="seccionLista">
-                <h5>Menciones en prensa</h5>
-                <ul>
-                  {proyecto.data.menciones_prensa.map((mencion) => (
-                    <li>
-                      {mencion.enlace ? (
-                        <a href={mencion.enlace} target="_blank" rel="noopener noreferrer">
-                          {mencion.titulo}
-                        </a>
-                      ) : (
-                        mencion.titulo
-                      )}{' '}
-                      <span class="textoSecundario">— {mencion.medio}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Enlaces */}
-            {((proyecto.data.enlaces && Object.keys(proyecto.data.enlaces).length > 0) || proyecto.data.instagram) && (
-              <div class="seccionEnlaces">
-                {proyecto.data.enlaces &&
-                  Object.entries(proyecto.data.enlaces).map(([key, url]) => (
-                    <a href={url} target="_blank" rel="noopener noreferrer" class="botonEnlace">
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </a>
-                  ))}
-                {proyecto.data.instagram && !proyecto.data.enlaces?.instagram && (
-                  <a href={proyecto.data.instagram} target="_blank" rel="noopener noreferrer" class="botonEnlace">
-                    Instagram
-                  </a>
-                )}
-              </div>
-            )}
-
-            {/* Videos */}
-            {proyecto.data.videos && proyecto.data.videos.length > 0 && (
-              <div class="seccionVideos">
-                {proyecto.data.videos.map((video) => {
-                  const videoId = obtenerIdVideo(video.id);
-                  if (!videoId) return null;
-
-                  if (video.plataforma === 'youtube') {
-                    return (
-                      <div class="videoEmbed">
-                        <iframe
-                          width="560"
-                          height="315"
-                          loading="lazy"
-                          src={`https://www.youtube.com/embed/${videoId}`}
-                          title={video.titulo || proyecto.data.titulo}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          referrerpolicy="strict-origin-when-cross-origin"
-                          allowfullscreen
-                        />
-                      </div>
-                    );
-                  } else if (video.plataforma === 'vimeo') {
-                    return (
-                      <div class="videoEmbed">
-                        <iframe
-                          src={`https://player.vimeo.com/video/${videoId}`}
-                          width="560"
-                          height="315"
-                          allow="autoplay; fullscreen; picture-in-picture"
-                          allowfullscreen
-                          title={video.titulo || proyecto.data.titulo}
-                        />
-                      </div>
-                    );
-                  } else if (video.plataforma === 'instagram') {
-                    return (
-                      <div class="videoEmbed instagram">
-                        <blockquote
-                          class="instagram-media"
-                          data-instgrm-permalink={videoId}
-                          data-instgrm-version="14"
-                        />
-                      </div>
-                    );
-                  }
-                })}
-              </div>
-            )}
-
-            {/* Galería de imágenes */}
-            {proyecto.data.galeria && (
-              <div class="seccionGaleria">
-                <h5>Galería</h5>
-                <Galeria carpeta={carpetaGaleria} />
-              </div>
-            )}
-          </div>
-        </article>
+        <TarjetaMedia
+          id={carpetaGaleria}
+          titulo={proyecto.data.titulo}
+          fecha={obtenerPeriodoDisplay(proyecto)}
+          imagen={proyecto.data.imagen_principal}
+          altImagen={proyecto.data.titulo}
+          carpetaGaleria={proyecto.data.galeria ? carpetaGaleria : undefined}
+          metadatos={metadatos}
+          secciones={secciones}
+          enlaces={enlaces}
+          videos={proyecto.data.videos || []}
+        >
+          <Content />
+        </TarjetaMedia>
       );
     })
   }

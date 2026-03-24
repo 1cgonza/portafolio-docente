@@ -45,7 +45,7 @@ const cursosRenderizados = cursos
             <a href={`/pdfs/${pagina.data.programaPDF}`} target="_blank">
               {pagina.data.titulo} (PDF)
             </a>
-            <Galeria carpeta={pagina.data.carpetaPrograma || `programa-${pagina.id}`} limite={2} />
+            <Galeria carpeta={pagina.data.carpetaPrograma || `programa-${pagina.id}`} limite={2} variante="compacta" />
           </div>
         </div>
       </section>

@@ -1,0 +1,103 @@
+---
+import TarjetaMedia from './TarjetaMedia.astro';
+
+const residencias = [
+  {
+    id: 'residencia-cecilia-traslavina',
+    titulo: 'Cecilia Traslavina - La vida secreta de los objetos',
+    fecha: '2025',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Residencia de animacion' },
+      { etiqueta: 'Rol', valor: 'Coordinacion academica' },
+      { etiqueta: 'Invitada', valor: 'Cecilia Traslavina' },
+    ],
+    carpetaGaleria: 'invitados-cecilia',
+    videos: [
+      {
+        plataforma: 'youtube' as const,
+        id: 'https://www.youtube.com/watch?v=g0ZMrhVVOSM',
+        titulo: 'Residencia de Cecilia Traslavina',
+      },
+    ],
+    contenido: [
+      'Durante 2025 acompanamos la residencia de Cecilia Traslavina alrededor del proyecto "La vida secreta de los objetos". La residencia activo espacios de trabajo, conversaciones y pruebas de animacion dentro de la Facultad.',
+      'El proceso se desarrollo como parte de la iniciativa del CIC para ofrecer tiempo, infraestructura y acompanamiento a artistas invitados durante el receso intersemestral.',
+    ],
+  },
+  {
+    id: 'residencia-habitografias',
+    titulo: 'Monica Bravo y Miguel Bohorquez - Habitografias / Encuentro',
+    fecha: '2024',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Residencia de animacion' },
+      { etiqueta: 'Rol', valor: 'Coordinacion academica' },
+      { etiqueta: 'Invitados', valor: 'Monica Bravo y Miguel Bohorquez' },
+    ],
+    carpetaGaleria: 'invitados-miguel-y-monica',
+    enlaces: [
+      {
+        etiqueta: 'Nota FacArtes',
+        url: 'https://facartes.uniandes.edu.co/investigacion-y-creacion/habitografias-encuentro-proyecto-animacion-de-monica-bravo-y-miguel-bohorquez-desarrollado-en-uniandes/',
+      },
+    ],
+    videos: [
+      {
+        plataforma: 'youtube' as const,
+        id: 'https://www.youtube.com/watch?v=ewWZryG7HYM',
+        titulo: 'Habitografias / Encuentro',
+      },
+    ],
+    contenido: [
+      'Los artistas Monica Bravo (Javeriana, Cali) y Miguel Bohorquez (Univalle) desarrollaron parte de su proyecto instalativo-animado "Habitografias / Encuentro" durante la residencia.',
+      'La residencia permitio avanzar en pruebas espaciales, trabajo de taller y articulaciones entre animacion, instalacion y experimentacion material en espacios de la Facultad.',
+    ],
+  },
+  {
+    id: 'residencia-calostro',
+    titulo: 'Diego Cortes - Calostro',
+    fecha: '2023',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Residencia de animacion' },
+      { etiqueta: 'Rol', valor: 'Coordinacion academica' },
+      { etiqueta: 'Invitado', valor: 'Diego Cortes' },
+    ],
+    enlaces: [
+      {
+        etiqueta: 'Nota FacArtes',
+        url: 'https://facartes.uniandes.edu.co/investigacion-y-creacion/diego-cortes-animacion/',
+      },
+    ],
+    videos: [
+      {
+        plataforma: 'youtube' as const,
+        id: 'https://www.youtube.com/watch?v=fSBaJxZEb8U',
+        titulo: 'Calostro',
+      },
+    ],
+    contenido: [
+      'Diego Cortes realizo su cortometraje "Calostro" usando los talleres de grabado, la sala de animacion analoga y el Laboratorio EnFlujo.',
+      'Esta primera experiencia ayudo a consolidar la residencia como una estrategia institucional para poner en relacion infraestructura, creacion artistica y comunidad externa.',
+    ],
+  },
+];
+---
+
+<div class="listadoTarjetasMedia residenciasAnimacion">
+  {
+    residencias.map((residencia) => (
+      <TarjetaMedia
+        id={residencia.id}
+        titulo={residencia.titulo}
+        fecha={residencia.fecha}
+        metadatos={residencia.metadatos}
+        carpetaGaleria={residencia.carpetaGaleria}
+        enlaces={residencia.enlaces}
+        videos={residencia.videos}
+      >
+        {residencia.contenido.map((parrafo) => (
+          <p>{parrafo}</p>
+        ))}
+      </TarjetaMedia>
+    ))
+  }
+</div>

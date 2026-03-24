@@ -1,5 +1,6 @@
 ---
-// Estructura de datos de evaluaciones organizadas por año
+import { getCollection } from 'astro:content';
+
 const evaluacionesPorAno = {
   2025: [
     {
@@ -7,14 +8,14 @@ const evaluacionesPorAno = {
       principal: '202520-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202520-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202520.png',
-      cursos: ['Laboratorio de Animación', 'Datos y Representación'],
+      cursos: ['Laboratorio de Animacion', 'Datos y Representacion'],
     },
     {
       periodo: '2025-1',
       principal: '202510-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202510-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202510.png',
-      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación', 'Narrativa Audiovisual 2'],
+      cursos: ['Visualizacion y Storytelling', 'Laboratorio de Animacion', 'Narrativa Audiovisual 2'],
     },
   ],
   2024: [
@@ -23,14 +24,14 @@ const evaluacionesPorAno = {
       principal: '202420-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202420-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202420.png',
-      cursos: ['Datos y Representación', 'Laboratorio de Animación'],
+      cursos: ['Datos y Representacion', 'Laboratorio de Animacion'],
     },
     {
       periodo: '2024-1',
       principal: '202410-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202410-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202410.png',
-      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación', 'Narrativa Transmedia'],
+      cursos: ['Visualizacion y Storytelling', 'Laboratorio de Animacion', 'Narrativa Transmedia'],
     },
   ],
   2023: [
@@ -39,14 +40,14 @@ const evaluacionesPorAno = {
       principal: '202320-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202320-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202320.png',
-      cursos: ['Cultura Digital', 'Laboratorio de Animación', 'Datos y Representación', 'Narrativa Transmedia'],
+      cursos: ['Cultura Digital', 'Laboratorio de Animacion', 'Datos y Representacion', 'Narrativa Transmedia'],
     },
     {
       periodo: '2023-1',
       principal: '202310-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202310-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202310.png',
-      cursos: ['Visualización y Storytelling', 'Narrativa Transmedia'],
+      cursos: ['Visualizacion y Storytelling', 'Narrativa Transmedia'],
     },
   ],
   2022: [
@@ -55,14 +56,14 @@ const evaluacionesPorAno = {
       principal: '202220-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202220-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202220.png',
-      cursos: ['Visiones Investigación-Creación', 'Laboratorio de Animación', 'Narrativa'],
+      cursos: ['Visiones Investigacion-Creacion', 'Laboratorio de Animacion', 'Narrativa'],
     },
     {
       periodo: '2022-1',
       principal: '202210-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202210-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202210.png',
-      cursos: ['Visualización y Storytelling', 'Laboratorio de Animación'],
+      cursos: ['Visualizacion y Storytelling', 'Laboratorio de Animacion'],
     },
   ],
   2021: [
@@ -71,14 +72,14 @@ const evaluacionesPorAno = {
       principal: '202120-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202120-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202120.png',
-      cursos: ['Visualización', 'Narrativa'],
+      cursos: ['Visualizacion', 'Narrativa'],
     },
     {
       periodo: '2021-1',
       principal: '202110-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202110-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202110.png',
-      cursos: ['Visualización', 'Narrativa'],
+      cursos: ['Visualizacion', 'Narrativa'],
     },
   ],
   2020: [
@@ -87,14 +88,14 @@ const evaluacionesPorAno = {
       principal: '202020-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '202020-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-202020.png',
-      cursos: ['Datos y Representación', 'Narrativa Multimedia'],
+      cursos: ['Datos y Representacion', 'Narrativa Multimedia'],
     },
     {
       periodo: '2020-1',
       principal: '202010-GENERAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: null,
       imagen: null,
-      cursos: ['Visualización', 'Narrativa'],
+      cursos: ['Visualizacion', 'Narrativa'],
     },
   ],
   2019: [
@@ -103,69 +104,85 @@ const evaluacionesPorAno = {
       principal: '201920-PRINCIPAL-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       comparado: '201920-COMPARADO-JUAN CAMILO GONZALEZ JIMENEZ.pdf',
       imagen: '/imagenes/evaluacion-201920.png',
-      cursos: ['Narrativa Multimedia', 'Datos y Representación'],
+      cursos: ['Narrativa Multimedia', 'Datos y Representacion'],
     },
   ],
 };
 
 const anos = Object.keys(evaluacionesPorAno).sort((a, b) => Number(b) - Number(a));
+
+const [cursosPregrado, cursosMaestria] = await Promise.all([
+  getCollection('cursosPregrado'),
+  getCollection('cursosMaestria'),
+]);
+
+const cursosPorPeriodo = [...cursosPregrado, ...cursosMaestria].reduce(
+  (acumulado, curso) => {
+    for (const ciclo of curso.data.ciclos) {
+      if (!acumulado[ciclo]) {
+        acumulado[ciclo] = [];
+      }
+
+      acumulado[ciclo].push(curso.data.titulo.trim());
+    }
+
+    return acumulado;
+  },
+  {} as Record<string, string[]>
+);
 ---
 
 <div class="evaluaciones-estudiantes">
-  <!-- Evaluaciones por periodo -->
   <div class="evaluaciones-por-ano">
     {
       anos.map((ano) => (
         <div class="ano-seccion">
           <div class="periodos-lista">
-            {evaluacionesPorAno[Number(ano) as keyof typeof evaluacionesPorAno].map((evaluacion) => (
-              <div class="periodo-card">
-                <div class="card-header">
-                  <h5 class="periodo-titulo">{evaluacion.periodo}</h5>
-                  <div class="documentos-enlaces">
-                    <a
-                      href={`/pdfs/evaluaciones/${evaluacion.principal}`}
-                      target="_blank"
-                      class="link-documento principal"
-                    >
-                      Reporte Principal
-                    </a>
-                    {evaluacion.comparado && (
-                      <a
-                        href={`/pdfs/evaluaciones/${evaluacion.comparado}`}
-                        target="_blank"
-                        class="link-documento comparado"
-                      >
-                        Reporte Comparado
+            {evaluacionesPorAno[Number(ano) as keyof typeof evaluacionesPorAno].map((evaluacion) => {
+              const cursosDelPeriodo = cursosPorPeriodo[evaluacion.periodo] || evaluacion.cursos;
+
+              return (
+                <div class="periodo-card">
+                  <div class="card-header">
+                    <h5 class="periodo-titulo">{evaluacion.periodo}</h5>
+                    <div class="documentos-enlaces">
+                      <a href={`/pdfs/evaluaciones/${evaluacion.principal}`} target="_blank" class="link-documento principal">
+                        Reporte Principal
                       </a>
-                    )}
-                  </div>
-                </div>
-
-                <div class="card-body">
-                  {evaluacion.imagen && (
-                    <div class="seccion-imagen">
-                      <img
-                        src={evaluacion.imagen}
-                        alt={`Gráfica comparativa de evaluaciones - ${evaluacion.periodo}`}
-                      />
-                      <p class="descripcion-imagen">
-                        Comparación de promedios: Juan Camilo González vs Facultad de Artes y Humanidades vs Universidad
-                      </p>
+                      {evaluacion.comparado && (
+                        <a
+                          href={`/pdfs/evaluaciones/${evaluacion.comparado}`}
+                          target="_blank"
+                          class="link-documento comparado"
+                        >
+                          Reporte Comparado
+                        </a>
+                      )}
                     </div>
-                  )}
+                  </div>
 
-                  <div class="seccion-cursos">
-                    <h6>Cursos dictados</h6>
-                    <ul class="lista-cursos">
-                      {evaluacion.cursos.map((curso) => (
-                        <li>{curso}</li>
-                      ))}
-                    </ul>
+                  <div class="card-body">
+                    {evaluacion.imagen && (
+                      <div class="seccion-imagen">
+                        <img src={evaluacion.imagen} alt={`Grafica comparativa de evaluaciones - ${evaluacion.periodo}`} />
+                        <p class="descripcion-imagen">
+                          Comparacion de promedios: Juan Camilo Gonzalez vs Facultad de Artes y Humanidades vs Universidad
+                        </p>
+                      </div>
+                    )}
+
+                    <div class="seccion-cursos">
+                      <h6>Cursos dictados</h6>
+                      <ul class="lista-cursos">
+                        {cursosDelPeriodo.map((curso) => (
+                          <li>{curso}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))

@@ -1,0 +1,285 @@
+---
+import type { ImageMetadata } from 'astro';
+import Galeria from './Galeria.astro';
+
+interface MetaItem {
+  etiqueta: string;
+  valor: string;
+  detalle?: string;
+}
+
+interface LinkItem {
+  etiqueta: string;
+  url: string;
+}
+
+interface ListItem {
+  titulo: string;
+  url?: string;
+  etiqueta?: string;
+  meta?: string;
+}
+
+interface SectionItem {
+  titulo: string;
+  items: ListItem[];
+}
+
+interface VideoItem {
+  plataforma?: 'youtube' | 'vimeo' | 'instagram';
+  id: string;
+  titulo?: string;
+}
+
+interface Props {
+  id?: string;
+  titulo: string;
+  fecha?: string;
+  imagen?: ImageMetadata;
+  altImagen?: string;
+  carpetaGaleria?: string;
+  tituloGaleria?: string;
+  metadatos?: MetaItem[];
+  secciones?: SectionItem[];
+  enlaces?: LinkItem[];
+  videos?: VideoItem[];
+}
+
+const {
+  id,
+  titulo,
+  fecha,
+  imagen,
+  altImagen,
+  carpetaGaleria,
+  tituloGaleria = 'Galeria',
+  metadatos = [],
+  secciones = [],
+  enlaces = [],
+  videos = [],
+} = Astro.props;
+
+const imagenesGaleria = carpetaGaleria
+  ? Object.entries(
+      import.meta.glob('../imagenes/**/*.{jpg,jpeg,png,webp}', {
+        eager: true,
+        import: 'default',
+      })
+    )
+      .filter(([ruta]) => ruta.includes(`/imagenes/${carpetaGaleria}/`))
+      .sort(([rutaA], [rutaB]) => rutaA.localeCompare(rutaB))
+      .map(([ruta, metadata]) => {
+        const imagenGaleria = metadata as ImageMetadata;
+        return {
+          metadata: imagenGaleria,
+          ruta,
+          src: imagenGaleria.src,
+          width: imagenGaleria.width,
+          height: imagenGaleria.height,
+        };
+      })
+  : [];
+
+const vistaPrevia = imagen
+  ? {
+      src: imagen.src,
+      width: imagen.width,
+      height: imagen.height,
+      alt: altImagen || titulo,
+    }
+  : imagenesGaleria[0]
+    ? {
+        src: imagenesGaleria[0].src,
+        width: imagenesGaleria[0].width,
+        height: imagenesGaleria[0].height,
+        alt: altImagen || titulo,
+      }
+    : undefined;
+
+function obtenerOrientacionImagen() {
+  if (!vistaPrevia) return 'sin-imagen';
+  if (vistaPrevia.height > vistaPrevia.width * 1.15) return 'vertical';
+  if (vistaPrevia.width > vistaPrevia.height * 1.15) return 'horizontal';
+  return 'cuadrada';
+}
+
+function obtenerIdVideo(url: string): string | null {
+  if (!url) return null;
+
+  const youtubeMatch =
+    url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/) ||
+    url.match(/^([a-zA-Z0-9_-]{11})$/);
+  if (youtubeMatch) return youtubeMatch[1];
+
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/) || url.match(/^\d+$/);
+  if (vimeoMatch) return vimeoMatch[1];
+
+  if (url.includes('instagram.com')) return url;
+
+  return url;
+}
+
+function obtenerUrlEmbedInstagram(url: string): string | null {
+  if (!url) return null;
+
+  const instagramMatch = url.match(/instagram\.com\/(p|reel|tv)\/([^/?#]+)/);
+  if (instagramMatch) {
+    const [, tipo, shortcode] = instagramMatch;
+    return `https://www.instagram.com/${tipo}/${shortcode}/embed/captioned/`;
+  }
+
+  return null;
+}
+
+const orientacionImagen = obtenerOrientacionImagen();
+---
+
+<article class={`tarjetaMedia ${vistaPrevia ? 'conImagen' : 'sinImagen'} imagen-${orientacionImagen}`} id={id}>
+  <div class="columnaVisualTarjeta">
+    <div class="encabezadoTarjetaLateral">
+      <h3 class="tituloTarjetaMedia">{titulo}</h3>
+      {fecha && <span class="fechaTarjetaMedia">{fecha}</span>}
+    </div>
+
+    {vistaPrevia && (
+      <div class="imagenDestacada galeria">
+        <a
+          href={vistaPrevia.src}
+          data-pswp-width={vistaPrevia.width}
+          data-pswp-height={vistaPrevia.height}
+          target="_blank"
+          class="imagenEnlaceTarjeta"
+          aria-label={`Ver imagen ampliada de ${titulo}`}
+        >
+          <img src={vistaPrevia.src} alt={vistaPrevia.alt} loading="lazy" />
+        </a>
+      </div>
+    )}
+
+    {metadatos.length > 0 && (
+      <div class="gridMetadatosTarjeta">
+        {metadatos.map((item) => (
+          <div class="itemMetadatoTarjeta">
+            <span class="etiquetaMetadatoTarjeta">{item.etiqueta}</span>
+            <span class="valorMetadatoTarjeta">
+              {item.valor}
+              {item.detalle && (
+                <>
+                  <br />
+                  <small>{item.detalle}</small>
+                </>
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <div class="contenidoTarjetaMedia">
+    <div class="contenidoTarjetaMedia__prosa">
+      <slot />
+    </div>
+
+    {secciones.map(
+      (seccion) =>
+        seccion.items.length > 0 && (
+          <div class="seccionTarjeta">
+            <h5>{seccion.titulo}</h5>
+            <ul>
+              {seccion.items.map((item) => (
+                <li>
+                  {item.etiqueta && <span class="etiquetaListaTarjeta">{item.etiqueta}</span>}{' '}
+                  {item.url ? (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                      {item.titulo}
+                    </a>
+                  ) : (
+                    item.titulo
+                  )}
+                  {item.meta && <span class="textoSecundarioTarjeta"> - {item.meta}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+    )}
+
+    {enlaces.length > 0 && (
+      <div class="grupoBotonesTarjeta">
+        {enlaces.map((enlace) => (
+          <a href={enlace.url} target="_blank" rel="noopener noreferrer" class="botonTarjeta">
+            {enlace.etiqueta}
+          </a>
+        ))}
+      </div>
+    )}
+
+    {videos.length > 0 && (
+      <div class="seccionVideosTarjeta">
+        {videos.map((video) => {
+          const videoId = obtenerIdVideo(video.id);
+          if (!videoId) return null;
+
+          if (video.plataforma === 'youtube') {
+            return (
+              <div class="videoEmbedTarjeta">
+                <iframe
+                  width="560"
+                  height="315"
+                  loading="lazy"
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title={video.titulo || titulo}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                />
+              </div>
+            );
+          }
+
+          if (video.plataforma === 'vimeo') {
+            return (
+              <div class="videoEmbedTarjeta">
+                <iframe
+                  src={`https://player.vimeo.com/video/${videoId}`}
+                  width="560"
+                  height="315"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                  title={video.titulo || titulo}
+                />
+              </div>
+            );
+          }
+
+          if (video.plataforma === 'instagram') {
+            const instagramEmbedUrl = obtenerUrlEmbedInstagram(videoId);
+            if (!instagramEmbedUrl) return null;
+
+            return (
+              <div class="videoEmbedTarjeta videoEmbedTarjeta--instagram">
+                <iframe
+                  src={instagramEmbedUrl}
+                  loading="lazy"
+                  title={video.titulo || titulo}
+                  allowtransparency="true"
+                  allowfullscreen
+                />
+              </div>
+            );
+          }
+
+          return null;
+        })}
+      </div>
+    )}
+
+    {carpetaGaleria && (
+      <div class="seccionTarjeta seccionTarjeta-galeria">
+        <h5>{tituloGaleria}</h5>
+        <Galeria carpeta={carpetaGaleria} variante="tarjeta" />
+      </div>
+    )}
+  </div>
+</article>
