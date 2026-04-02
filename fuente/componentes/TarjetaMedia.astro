@@ -36,6 +36,7 @@ interface Props {
   id?: string;
   titulo: string;
   fecha?: string;
+  nivelTitulo?: 3 | 4 | 5 | 6;
   imagen?: ImageMetadata;
   altImagen?: string;
   carpetaGaleria?: string;
@@ -50,6 +51,7 @@ const {
   id,
   titulo,
   fecha,
+  nivelTitulo = 3,
   imagen,
   altImagen,
   carpetaGaleria,
@@ -59,6 +61,8 @@ const {
   enlaces = [],
   videos = [],
 } = Astro.props;
+
+const EtiquetaTitulo = `h${nivelTitulo}` as 'h3' | 'h4' | 'h5' | 'h6';
 
 const primeraImagenGaleria = carpetaGaleria ? obtenerPrimeraImagenDeCarpeta(carpetaGaleria) : undefined;
 
@@ -118,10 +122,10 @@ const orientacionImagen = obtenerOrientacionImagen();
 
 <article class={`tarjetaMedia ${vistaPrevia ? 'conImagen' : 'sinImagen'} imagen-${orientacionImagen}`} id={id}>
   <div class="columnaVisualTarjeta">
-    <div class="encabezadoTarjetaLateral">
-      <h3 class="tituloTarjetaMedia">{titulo}</h3>
+    <header class="encabezadoTarjetaLateral">
+      <EtiquetaTitulo class="tituloTarjetaMedia">{titulo}</EtiquetaTitulo>
       {fecha && <span class="fechaTarjetaMedia">{fecha}</span>}
-    </div>
+    </header>
 
     {
       vistaPrevia && (
@@ -187,7 +191,7 @@ const orientacionImagen = obtenerOrientacionImagen();
       secciones.map(
         (seccion) =>
           seccion.items.length > 0 && (
-            <div class="seccionTarjeta">
+            <section class="seccionTarjeta">
               <h5>{seccion.titulo}</h5>
               <ul>
                 {seccion.items.map((item) => (
@@ -204,7 +208,7 @@ const orientacionImagen = obtenerOrientacionImagen();
                   </li>
                 ))}
               </ul>
-            </div>
+            </section>
           )
       )
     }
@@ -223,7 +227,7 @@ const orientacionImagen = obtenerOrientacionImagen();
 
     {
       videos.length > 0 && (
-        <div class="seccionVideosTarjeta">
+        <section class="seccionVideosTarjeta" aria-label="Videos relacionados">
           {videos.map((video) => {
             const videoId = obtenerIdVideo(video.id);
             if (!videoId) return null;
@@ -280,16 +284,16 @@ const orientacionImagen = obtenerOrientacionImagen();
 
             return null;
           })}
-        </div>
+        </section>
       )
     }
 
     {
       carpetaGaleria && (
-        <div class="seccionTarjeta seccionTarjeta-galeria">
+        <section class="seccionTarjeta seccionTarjeta-galeria">
           <h5>{tituloGaleria}</h5>
           <Galeria carpeta={carpetaGaleria} variante="tarjeta" />
-        </div>
+        </section>
       )
     }
   </div>

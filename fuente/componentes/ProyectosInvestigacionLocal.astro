@@ -108,43 +108,6 @@ function formatearFuenteFinanciacion(fuente: FundingItem) {
   return fuente.entidad ? `${tipo}: ${fuente.entidad}` : tipo;
 }
 
-const resumenSeccion = (() => {
-  const conteos = {
-    proyectos: proyectos.length,
-    interna: 0,
-    externa: 0,
-    fapa: 0,
-    institucional: 0,
-    productos: 0,
-    exhibiciones: 0,
-    premios: 0,
-  };
-
-  proyectos.forEach((proyecto) => {
-    normalizarFinanciacion(proyecto.data.financiacion).forEach((fuente) => {
-      if (fuente.tipo === 'interna') conteos.interna += 1;
-      if (fuente.tipo === 'externa') conteos.externa += 1;
-      if (fuente.tipo === 'FAPA') conteos.fapa += 1;
-      if (fuente.tipo === 'institucional') conteos.institucional += 1;
-    });
-
-    conteos.productos += proyecto.data.productos?.length || 0;
-    conteos.exhibiciones += proyecto.data.exhibiciones?.length || 0;
-    conteos.premios += proyecto.data.premios?.length || 0;
-  });
-
-  return [
-    { etiqueta: 'Proyectos', valor: conteos.proyectos },
-    { etiqueta: 'Financiaciones internas', valor: conteos.interna },
-    { etiqueta: 'Financiaciones externas', valor: conteos.externa },
-    { etiqueta: 'FAPA', valor: conteos.fapa },
-    { etiqueta: 'Apoyos institucionales', valor: conteos.institucional },
-    { etiqueta: 'Productos', valor: conteos.productos },
-    { etiqueta: 'Exhibiciones', valor: conteos.exhibiciones },
-    { etiqueta: 'Premios', valor: conteos.premios },
-  ];
-})();
-
 proyectos.sort((a, b) => {
   const diffFin = obtenerClaveFinParaOrden(b) - obtenerClaveFinParaOrden(a);
   if (diffFin !== 0) return diffFin;
@@ -155,22 +118,6 @@ proyectos.sort((a, b) => {
   return a.data.titulo.localeCompare(b.data.titulo, 'es');
 });
 ---
-
-<section class="resumenProyectosInvestigacion" aria-labelledby="resumen-proyectos-investigacion">
-  <div class="resumenProyectosInvestigacion__encabezado">
-    <h4 id="resumen-proyectos-investigacion">Resumen</h4>
-  </div>
-  <div class="resumenProyectosInvestigacion__grid">
-    {
-      resumenSeccion.map((item) => (
-        <div class="resumenProyectosInvestigacion__item">
-          <span class="resumenProyectosInvestigacion__valor">{item.valor}</span>
-          <span class="resumenProyectosInvestigacion__etiqueta">{item.etiqueta}</span>
-        </div>
-      ))
-    }
-  </div>
-</section>
 
 <div class="listadoTarjetasMedia proyectosInvestigacion">
   {
@@ -281,6 +228,7 @@ proyectos.sort((a, b) => {
           id={carpetaGaleria}
           titulo={proyecto.data.titulo}
           fecha={obtenerPeriodoDisplay(proyecto)}
+          nivelTitulo={4}
           imagen={proyecto.data.imagen_principal}
           altImagen={proyecto.data.titulo}
           carpetaGaleria={proyecto.data.galeria ? carpetaGaleria : undefined}

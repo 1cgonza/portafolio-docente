@@ -9,12 +9,12 @@ const paginas = await getCollection('paginasDocencia').then((p) => p.sort((a, b)
     paginas.map(async (pagina) => {
       const { Content } = await render(pagina);
       return (
-        <>
+        <section aria-labelledby={pagina.id}>
           <h3 id={pagina.id}>{pagina.data.titulo}</h3>
           <div class={pagina.data.tipo === 'prosa' ? 'seccion-prosa' : undefined}>
             <Content />
           </div>
-        </>
+        </section>
       );
     })
 }

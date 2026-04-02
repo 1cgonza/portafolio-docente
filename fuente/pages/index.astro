@@ -4,27 +4,65 @@ import { getCollection, render } from 'astro:content';
 
 const paginas = await getCollection('paginas').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
 const paginasDocencia = await getCollection('paginasDocencia').then((p) => p.sort((a, b) => a.id.localeCompare(b.id)));
+
+const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> = {
+  '01_carta': [
+    { href: '#cronologia-sintetica-2019-2026', titulo: 'Cronología sintética' },
+    { href: '#sintesis-de-aportes', titulo: 'Síntesis de aportes' },
+    { href: '#proyeccion-de-trabajo', titulo: 'Proyección de trabajo' },
+  ],
+  '02_docencia': paginasDocencia
+    .map((pagina) => ({
+      href: `#${pagina.id}`,
+      titulo: pagina.data.titulo,
+    }))
+    .concat([
+      {
+        href: '#formacion-docente-y-actualizacion-pedagogica',
+        titulo: 'Formación docente y actualización pedagógica',
+      },
+      {
+        href: '#otros',
+        titulo: 'Otros',
+      },
+    ]),
+  '03_produccion': [
+    { href: '#proyectos-investigacion-creacion', titulo: 'Proyectos de investigación-creación' },
+    { href: '#viajes-y-conferencias', titulo: 'Viajes y conferencias' },
+  ],
+  '04_desarrollo': [
+    {
+      href: '#actividades-y-articulaciones-institucionales',
+      titulo: 'Actividades y articulaciones',
+    },
+    { href: '#residencias-de-animacion', titulo: 'Residencias de animación' },
+  ],
+  '05_seguimiento': [
+    { href: '#informes-previos', titulo: 'Informes previos' },
+    { href: '#balance-de-cumplimiento', titulo: 'Balance de cumplimiento' },
+  ],
+};
 ---
 
 <Plantilla>
   <input type="checkbox" id="menuToggle" class="menuToggle" />
-  <label for="menuToggle" class="menuHamburguesa">
+  <label for="menuToggle" class="menuHamburguesa" aria-label="Abrir o cerrar navegación">
     <span></span>
     <span></span>
     <span></span>
   </label>
 
-  <nav id="menu">
-    <ul>
+  <nav id="menu" aria-label="Navegación del portafolio">
+    <ul class="menuPrincipal">
       {
         paginas.map((pagina) => (
           <li>
             <a href={`#${pagina.id}`}>{pagina.data.titulo}</a>
-            {pagina.id === '02_docencia' && (
-              <ul>
-                {paginasDocencia.map((pDocencia) => (
+            {submenuPorPagina[pagina.id]?.length > 0 && (
+              <ul class="submenu">
+                {submenuPorPagina[pagina.id].map((subseccion) => (
                   <li>
-                    <a href={`#${pDocencia.id}`}>{pDocencia.data.titulo}</a>
+                    <a href={subseccion.href}>{subseccion.titulo}</a>
                   </li>
                 ))}
               </ul>
@@ -38,21 +76,98 @@ const paginasDocencia = await getCollection('paginasDocencia').then((p) => p.sor
   <main>
     <header>
       <h1>Juan Camilo González Jiménez</h1>
-      <h2>Portafolio docente, 2026</h2>
+      <p class="subtituloPortafolio">Portafolio docente, 2026</p>
     </header>
 
     {
       paginas.map(async (pagina) => {
         const { Content } = await render(pagina);
         return (
-          <>
+          <section aria-labelledby={pagina.id}>
             <h2 id={pagina.id}>{pagina.data.titulo}</h2>
             <div class={pagina.data.tipo === 'prosa' ? 'seccion-prosa' : undefined}>
               <Content />
             </div>
-          </>
+          </section>
         );
       })
     }
   </main>
+
+  <script>
+    (() => {
+      const menu = document.querySelector('#menu');
+      if (!menu) return;
+
+      const links = Array.from(menu.querySelectorAll('a[href^="#"]'));
+      const trackedLinks = links
+        .map((link) => {
+          const href = link.getAttribute('href');
+          if (!href || href === '#') return null;
+
+          const targetId = href.startsWith('#') ? decodeURIComponent(href.slice(1)) : href;
+          const target = document.getElementById(targetId);
+          if (!(target instanceof HTMLElement)) return null;
+
+          return { link, target };
+        })
+        .filter(Boolean);
+
+      if (trackedLinks.length === 0) return;
+
+      const limpiarEstado = () => {
+        links.forEach((link) => {
+          link.classList.remove('is-active', 'is-active-parent');
+          link.removeAttribute('aria-current');
+        });
+      };
+
+      const obtenerAncestroPrincipal = (link) => {
+        const submenu = link.closest('.submenu');
+        if (!(submenu instanceof HTMLElement)) return null;
+
+        const itemPrincipal = submenu.closest('li');
+        if (!(itemPrincipal instanceof HTMLLIElement)) return null;
+
+        const enlacePrincipal = itemPrincipal.querySelector(':scope > a');
+        return enlacePrincipal instanceof HTMLAnchorElement ? enlacePrincipal : null;
+      };
+
+      const actualizarMenuActivo = () => {
+        const offset = window.innerWidth <= 768 ? 120 : 160;
+        let activo = trackedLinks[0];
+
+        trackedLinks.forEach((item) => {
+          if (item.target.getBoundingClientRect().top - offset <= 0) {
+            activo = item;
+          }
+        });
+
+        if (!activo) return;
+
+        limpiarEstado();
+        activo.link.classList.add('is-active');
+        activo.link.setAttribute('aria-current', 'location');
+
+        const ancestroPrincipal = obtenerAncestroPrincipal(activo.link);
+        if (ancestroPrincipal) {
+          ancestroPrincipal.classList.add('is-active-parent');
+        }
+      };
+
+      let frame = 0;
+      const solicitarActualizacion = () => {
+        if (frame) return;
+        frame = window.requestAnimationFrame(() => {
+          actualizarMenuActivo();
+          frame = 0;
+        });
+      };
+
+      window.addEventListener('scroll', solicitarActualizacion, { passive: true });
+      window.addEventListener('resize', solicitarActualizacion);
+      window.addEventListener('load', solicitarActualizacion);
+      solicitarActualizacion();
+    })();
+  </script>
 </Plantilla>
