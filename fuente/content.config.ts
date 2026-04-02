@@ -178,6 +178,82 @@ const proyectosInvestigacion = defineCollection({
     }),
 });
 
+const viajesConferencias = defineCollection({
+  loader: glob({
+    pattern: ['*.{md,mdx}', '!_*.{md,mdx}', '!README.md'],
+    base: './fuente/contenido/investigacion/viajes-conferencias',
+  }),
+  schema: ({ image }) =>
+    z.object({
+      titulo: z.string(),
+      slug: z.string().optional(),
+      'a\u00f1o_inicio': z.number(),
+      'a\u00f1o_fin': z.number().optional(),
+      fecha_inicio: z
+        .string()
+        .regex(/^\d{4}-\d{2}(-\d{2})?$/, 'Usa formato YYYY-MM o YYYY-MM-DD')
+        .optional(),
+      fecha_fin: z
+        .string()
+        .regex(/^\d{4}-\d{2}(-\d{2})?$/, 'Usa formato YYYY-MM o YYYY-MM-DD')
+        .optional(),
+      estado: z.enum(['finalizado', 'en curso', 'publicado']).optional(),
+      tipo: z.string().optional(),
+      rol: z.string().optional(),
+      evento: z.string().optional(),
+      institucion: z.string().optional(),
+      lugar: z.string().optional(),
+      organizadores: z.array(z.string()).optional(),
+      participaciones: z
+        .array(
+          z.object({
+            tipo: z.string().optional(),
+            titulo: z.string(),
+            enlace: z.string().optional(),
+            meta: z.string().optional(),
+          })
+        )
+        .optional(),
+      resultados: z
+        .array(
+          z.object({
+            tipo: z.string().optional(),
+            titulo: z.string(),
+            enlace: z.string().optional(),
+            meta: z.string().optional(),
+          })
+        )
+        .optional(),
+      financiacion: z
+        .union([
+          z.object({
+            tipo: z.enum(['interna', 'externa', 'FAPA', 'institucional']),
+            entidad: z.string().optional(),
+          }),
+          z.array(
+            z.object({
+              tipo: z.enum(['interna', 'externa', 'FAPA', 'institucional']),
+              entidad: z.string().optional(),
+            })
+          ),
+        ])
+        .optional(),
+      imagen_principal: image().optional(),
+      galeria: z.boolean().optional(),
+      videos: z
+        .array(
+          z.object({
+            plataforma: z.enum(['youtube', 'vimeo', 'instagram']).optional(),
+            id: z.string(),
+            titulo: z.string().optional(),
+          })
+        )
+        .optional(),
+      enlaces: z.record(z.string(), z.string()).optional(),
+      'a\u00f1o': z.number().optional(),
+    }),
+});
+
 export const collections = {
   paginas,
   paginasDocencia,
@@ -186,4 +262,5 @@ export const collections = {
   proyectosGrado,
   asistentesInvestigacion,
   proyectosInvestigacion,
+  viajesConferencias,
 };

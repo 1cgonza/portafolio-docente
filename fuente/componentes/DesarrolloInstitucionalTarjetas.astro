@@ -1,0 +1,232 @@
+---
+import TarjetaMedia from './TarjetaMedia.astro';
+
+import sheilaImage from '@/contenido/desarrollo/sheila-1920-Laboratorio-animacion.jpg';
+
+const actividades = [
+  {
+    id: 'coordinacion-talleres',
+    titulo: 'Coordinación académica',
+    fecha: '2020 - actualmente',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Gestión académica' },
+      { etiqueta: 'Rol', valor: 'Coordinación' },
+    ],
+    contenido: [
+      'En nuestro departamento, cada línea de talleres tiene un profesor coordinador que se asegura de darle coherencia a la formación en cada lenguaje, apoyar a la dirección en los procesos de contratación de profesores de cátedra, acompañar a estos profesores en su desarrollo docente y cada cierto tiempo hacer ajustes de alienación curricular. Yo he sido coordinador de las areas de multimedia y audiovisual. Actualmente soy el coordinador de audiovisual.',
+    ],
+  },
+  {
+    id: 'animaficci',
+    titulo: 'Convenio con el Festival de Cine de Cartagena - Animaficci',
+    fecha: '2025 - actualmente',
+    // carpetaGaleria: 'vfs',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Convenio' },
+      { etiqueta: 'Institución', valor: 'Festival Internacional de Cine de Cartagena (FICCI)' },
+      { etiqueta: 'Rol', valor: 'Articulación académica' },
+    ],
+    secciones: [
+      {
+        titulo: 'Ediciones',
+        items: [
+          {
+            titulo: 'Animaficci 2025: ',
+            meta: 'edición inaugural con la participación de 2 estudiantes de narrativas digitales y el invitado internacional Niles Atalah.',
+          },
+          {
+            titulo: 'Animaficci 2026',
+            meta: 'Segunda edición',
+          },
+        ],
+      },
+    ],
+    contenido: [
+      'Animaficci es un espacio de formación para jovenes realizadores de animación en Colombia y america latina. Yo soy el encargado de coordinar las clínicas de proyectos, que son espacios donde los jovenes realizadores afianzan sus proyectos con el objetivo final de presentar un "pitch" al público general del festival. Es un espacio muy valioso para ampliar los vínculos entre el programa y el la plataforma del festival.',
+      'Una de las características más valiosas de este convenio es que apoyamos cada año 1 proyecto con enfoque territorial. De todos los proyectos que se presentan, seleccionamos uno para becar a los realizadores para que viajen a Cartagena y hagan parte de la clínica. Este proyecto debe ser realizado por jóvenes de algún territorio de Colombia que no sean ciudades principales.',
+      'En la primera edición, dos estudiantes de narrativas digitales quedaron seleccionados para participar de las clínicas, ellos fueron: Valeria Preciado y Jonathan Nausa.',
+    ],
+  },
+  {
+    id: 'vancouver-film-school',
+    titulo: 'Convenio con el Vancouver Film School',
+    fecha: '2023 - actualmente',
+    carpetaGaleria: 'vfs',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Invitados y talleres externos' },
+      { etiqueta: 'Institución', valor: 'Vancouver Film School' },
+      { etiqueta: 'Rol', valor: 'Articulación académica' },
+    ],
+    secciones: [
+      {
+        titulo: 'Talleres con expertos del VFS',
+        items: [
+          {
+            titulo: 'Liberar la imaginación: diseño de personajes y mundos para la animación.',
+            meta: 'Federico Gutiérrez',
+          },
+          {
+            titulo: 'Introducción al Sketching: Narrativas y diseño de mundos para cine y videojuegos.',
+            meta: 'Paola Andrea Muñoz',
+          },
+          { titulo: 'Crea tu videojuego de plataforma 2D en Unity', meta: 'Rafael Arias González' },
+          { titulo: 'An Examination of Prompts, Process & Platforms', meta: 'Arun Fryer' },
+        ],
+      },
+    ],
+    contenido: [
+      'Desde el 2023 he impulsado un convenio con el Vancouver Film School para crear un estrecho vinculo entre esta institución y nuestra facultad. Hasta el momento hemos realizado cuatro talleres con expertos del VFS para estudiantes de toda la universidad, con temas relacionados con el diseño de personajes, mundos y narrativas para animación, cine y videojuegos.',
+      'En el 2025, formalizamos el convenio entre las dos instituciones y lanzamos una beca específica para estudiantes de la Universidad de los Andes. En este proceso, la estudiante de literatura  Andrea Carolina Cruz Hernández fue la ganadora de una beca del 100% para estudiar en el VFS, otros estudiantes recibieron becas del 50% y el 25% y algunos de ellos aceptaron estas becas parciales para estudiar su posgrado en el VFS.',
+    ],
+  },
+  {
+    id: 'pensadores-del-mundo',
+    titulo: 'Beca Pensadores del Mundo - Sheila Sofian',
+    fecha: '2022',
+    imagen: sheilaImage,
+    carpetaGaleria: 'sheila',
+    altImagen: 'Sheila Sofian, beca Pensadores del mundo',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Invitados y circulación académica' },
+      { etiqueta: 'Rol', valor: 'Articulación docente' },
+    ],
+    secciones: [
+      {
+        titulo: 'Actividades',
+        items: [
+          {
+            titulo: 'Curso “Laboratorio de Animación”',
+            meta: 'coteaching - curso en inglés dedicado a la animación docuemntal.',
+          },
+          {
+            titulo: 'Muestra y conversatorio',
+            meta: 'En alianza con la Universidad de Bogotá Jorge Tadeo Lozano y la Cinemateca de Bogotá en el marco del ciclo “Datos y Relatos”',
+          },
+          { titulo: 'Muestra y conversatorio', meta: 'Proyección y conversatorio del largometraje "Truth Has Fallen"' },
+          {
+            titulo: 'Conferencia "Creando empatía: el uso del documental y la animación"',
+            meta: 'Seminario académico en Cali, Festival Internacional de Cine de Cali (FICALI)',
+          },
+          {
+            titulo: 'Visita guiada',
+            meta: 'Visita de estudiantes al taller de animación donde Sheila mostró sus proceso creativo y técnica de animación de pintura sobre vidrio.',
+          },
+        ],
+      },
+    ],
+    contenido: [
+      'En el 2022 realicé la aplicación y gestión de la beca "Pensadores del Mundo" de la Vicerrectoría de Investigación y Creación para traer a la profesora y animadora Sheila Sofian de la Universidad del Sur de California (USC) a nuestra universidad. Nos aprobaron la beca por $92.150.200 para que Sheila estuviera 2 meses en nuestra universidad realizando multiples actividades que resultaron muy valiosas para los estudiantes.',
+      'Sheila fue mi tutora de tesis de maestría cuando realicé mis estudios en USC, y su visita a nuestra universidad fue una oportunidad de tejer vínculos entre nuestra universidad y USC. Su trabajo se centra en la animación documental y es pionera del genero.',
+      'Durante su visita, Sheila y yo dicatmos una edición especial en inglés del curso "Laboratorio de animación", también viajamos a Cali para realizar conferencias en el FICALI, dictó una conferencia abierta en la Cinemateca de Bogotá y realizó un taller con estudiantes de pregrado y posgrado del programa. Estas actividades enriquecieron la formación de los estudiantes y fortalecieron los vínculos académicos entre nuestra universidad y USC.',
+      'Como resultado del curso que distamos juntos, los estudiantes trabajaron en un proyecto de animación documental que se llamó "Esto (no) pasó", el cual quedó seleccionado en FICALI el año siguiente y se proyectó en el festival.',
+    ],
+  },
+  {
+    id: 'invitados-internacionales',
+    titulo: 'Invitados internacionales',
+    fecha: '2021 - 2025',
+    carpetaGaleria: 'invitados',
+    altImagen: 'Invitados internacionales en cursos y actividades del programa',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Invitados y circulación académica' },
+      { etiqueta: 'Rol', valor: 'Articulación docente' },
+    ],
+    secciones: [
+      {
+        titulo: 'Invitados y contextos',
+        items: [
+          { titulo: 'Mathew Charles', meta: '2019 | Reino Unido | Muestra y conversatorio' },
+          { titulo: 'Aitor Oñederra', meta: '2021 | España | Conversatorio' },
+          { titulo: 'Niles Atallah', meta: '2025 | Chile | Animaficci, conferencia y taller con estudiantes.' },
+          { titulo: 'Ross Hogg', meta: '2025 | Reino Unido | Conversatorio' },
+        ],
+      },
+    ],
+    contenido: [
+      'Estas invitaciones han enriquecido la enseñanza de la animación, la cultura visual y los procesos experimentales de creación dentro del programa.',
+    ],
+  },
+  {
+    id: 'representante-cic',
+    titulo: 'Comité CIC - Representante del Ceper',
+    fecha: '2021 - 2023',
+    metadatos: [{ etiqueta: 'Rol', valor: 'Representación' }],
+    contenido: [
+      'Durante el periodo 2021-2023 fui representante del Ceper en el entonces llamado CIC. La funciones que desarrollé allí fueron: la revisión de proyectos de profesores y estudiantes que aplicaban a las convocatorias internas, coordinar las calificaciones de producción académica de los profesores del departamento, desarrollar iniciativas de investigación-creación para la facultad, entre otras actividades. Fue un espacio muy valioso para aprender sobre el funcionamiento de los recursos de la facultad y conocer de cerca la rica producción de mis colegas y estudiantes de toda la facultad.',
+    ],
+  },
+  {
+    id: 'contratacion-sergio-cantor',
+    titulo: 'Proceso de contratación - Sergio Cantor',
+    fecha: '2023',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Fortalecimiento del programa' },
+      { etiqueta: 'Rol', valor: 'Participación en contratación' },
+    ],
+    contenido: [
+      'En el 2023 realicé una solicitud de contratación de un técnico de salas para el departamento ya que se presentaban problemas constantes en los salones de clase. En su momento, la decana me pidió diseñar el perfil, hacer la convocatoria, revisar las aplicaciones, entrevistar a los candidatos y hacer la recomendación de contratación. El proceso se llevó a cabo con éxito y se contrató a Sergio Cantor, quien ha sido un gran aporte para el programa en su rol de técnico de salas.',
+    ],
+  },
+  {
+    id: 'contratacion-jaime-rodriguez',
+    titulo: 'Proceso de selección profesoral - Jaime Rodríguez',
+    fecha: '2022',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Selección profesoral' },
+      { etiqueta: 'Rol', valor: 'Comité de selección' },
+    ],
+    contenido: [
+      'Hice parte del comité de selección de un nuevo profesor de planta para el departamento. Mi participación incluyó revisión de aplicaciones, entrevistas, observación de desempeño docente y valoración de las conferencias presentadas por los candidatos.',
+      'Este proceso aportó directamente al fortalecimiento del programa y a la consolidación de su planta profesoral.',
+    ],
+  },
+  {
+    id: 'jurados-y-evaluaciones',
+    titulo: 'Jurado y evaluación externa',
+    fecha: '2020 - 2021',
+    metadatos: [
+      { etiqueta: 'Tipo', valor: 'Jurados y evaluación' },
+      { etiqueta: 'Rol', valor: 'Jurado y asesor' },
+    ],
+    secciones: [
+      {
+        titulo: 'Participaciones',
+        items: [
+          { titulo: 'Residencia Plataforma Bogotá - Medialab Prado (Madrid)', meta: '2020' },
+          { titulo: 'Beca de cortometraje de animación - Cinemateca de Bogotá', meta: '2020' },
+          {
+            titulo: 'Norman McLaren - Evelyn Lambart Award for Best Scholarly Article on Animation',
+            meta: '2021',
+            url: 'https://www.academia.edu/49291831/ANNOUNCEMENT_of_AWARDS_NORMAN_MCLAREN_EVELYN_LAMBART_AWARD_BEST_SCHOLARLY_ARTICLE_ON_ANIMATION_Society_for_Animation_Studies_',
+          },
+        ],
+      },
+    ],
+    contenido: [
+      'He participado como jurado y evaluador en distintos contextos académicos y culturales, lo cual muestra reconocimiento externo y una intervención activa en circuitos de evaluación y legitimación del campo.',
+      'Estas invitaciones complementan mi trabajo docente y de investigación-creación con una dimensión de valoración crítica y acompañamiento a procesos de otros proyectos e instituciones.',
+    ],
+  },
+];
+---
+
+<div class="listadoTarjetasMedia desarrolloInstitucionalTarjetas">
+  {
+    actividades.map((actividad) => (
+      <TarjetaMedia
+        id={actividad.id}
+        titulo={actividad.titulo}
+        fecha={actividad.fecha}
+        imagen={actividad.imagen}
+        altImagen={actividad.altImagen}
+        carpetaGaleria={actividad.carpetaGaleria}
+        metadatos={actividad.metadatos}
+        secciones={actividad.secciones}
+      >
+        {actividad.contenido.map((parrafo) => (
+          <p>{parrafo}</p>
+        ))}
+      </TarjetaMedia>
+    ))
+  }
+</div>

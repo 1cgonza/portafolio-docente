@@ -5,8 +5,8 @@ import { obtenerPrimeraImagenDeCarpeta } from '@/utilidades/imagenes';
 
 interface MetaItem {
   etiqueta: string;
-  valor: string;
-  detalle?: string;
+  valor: string | string[];
+  detalle?: string | string[];
 }
 
 interface LinkItem {
@@ -147,11 +147,27 @@ const orientacionImagen = obtenerOrientacionImagen();
             <div class="itemMetadatoTarjeta">
               <span class="etiquetaMetadatoTarjeta">{item.etiqueta}</span>
               <span class="valorMetadatoTarjeta">
-                {item.valor}
+                {Array.isArray(item.valor)
+                  ? item.valor.map((linea, index) => (
+                      <>
+                        {index > 0 && <br />}
+                        {linea}
+                      </>
+                    ))
+                  : item.valor}
                 {item.detalle && (
                   <>
                     <br />
-                    <small>{item.detalle}</small>
+                    <small>
+                      {Array.isArray(item.detalle)
+                        ? item.detalle.map((linea, index) => (
+                            <>
+                              {index > 0 && <br />}
+                              {linea}
+                            </>
+                          ))
+                        : item.detalle}
+                    </small>
                   </>
                 )}
               </span>

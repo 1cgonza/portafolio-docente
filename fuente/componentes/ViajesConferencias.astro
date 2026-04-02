@@ -1,0 +1,221 @@
+---
+import { getCollection, render } from 'astro:content';
+import TarjetaMedia from './TarjetaMedia.astro';
+
+type MetaItem = {
+  etiqueta: string;
+  valor: string;
+  detalle?: string;
+};
+
+type LinkItem = {
+  etiqueta: string;
+  url: string;
+};
+
+type FundingItem = {
+  tipo: 'interna' | 'externa' | 'FAPA' | 'institucional';
+  entidad?: string;
+};
+
+type SectionItem = {
+  titulo: string;
+  items: Array<{
+    titulo: string;
+    url?: string;
+    etiqueta?: string;
+    meta?: string;
+  }>;
+};
+
+const viajesConferencias = await getCollection('viajesConferencias');
+
+const ANO = 'a\u00f1o';
+const ANO_INICIO = 'a\u00f1o_inicio';
+const ANO_FIN = 'a\u00f1o_fin';
+
+function obtenerAno(item: (typeof viajesConferencias)[0], llave: string) {
+  return item.data[llave as keyof typeof item.data] as number | undefined;
+}
+
+function obtenerClaveFecha(fecha: string | undefined, ano: number | undefined, tipo: 'inicio' | 'fin') {
+  if (fecha) {
+    const [anoTexto, mesTexto, diaTexto] = fecha.split('-');
+    const anoNormalizado = Number(anoTexto);
+    const mesNormalizado = Number(mesTexto);
+    const diaNormalizado = diaTexto ? Number(diaTexto) : tipo === 'fin' ? 31 : 1;
+
+    if (Number.isFinite(anoNormalizado) && Number.isFinite(mesNormalizado) && Number.isFinite(diaNormalizado)) {
+      return anoNormalizado * 10000 + mesNormalizado * 100 + diaNormalizado;
+    }
+  }
+
+  if (!ano) return 0;
+  return tipo === 'fin' ? ano * 10000 + 1231 : ano * 10000 + 101;
+}
+
+function obtenerAnoInicio(item: (typeof viajesConferencias)[0]) {
+  return obtenerAno(item, ANO_INICIO) || obtenerAno(item, ANO);
+}
+
+function obtenerAnoFin(item: (typeof viajesConferencias)[0]) {
+  return obtenerAno(item, ANO_FIN);
+}
+
+function estaEnCursoSinFechaFinal(item: (typeof viajesConferencias)[0]) {
+  return item.data.estado === 'en curso' && !item.data.fecha_fin && !obtenerAnoFin(item);
+}
+
+function obtenerClaveFinParaOrden(item: (typeof viajesConferencias)[0]) {
+  if (estaEnCursoSinFechaFinal(item)) {
+    return 99991231;
+  }
+
+  return obtenerClaveFecha(item.data.fecha_fin, obtenerAnoFin(item) || obtenerAnoInicio(item), 'fin');
+}
+
+function obtenerClaveInicioParaOrden(item: (typeof viajesConferencias)[0]) {
+  return obtenerClaveFecha(item.data.fecha_inicio, obtenerAnoInicio(item), 'inicio');
+}
+
+function obtenerPeriodoDisplay(item: (typeof viajesConferencias)[0]) {
+  const inicioBase = obtenerAnoInicio(item);
+  const finBase = obtenerAnoFin(item);
+  const inicio = inicioBase ? `${inicioBase}` : '';
+  const fin = finBase ? `${finBase}` : '';
+
+  if (inicio && fin && inicio !== fin) return `${inicio} - ${fin}`;
+  if (inicio && item.data.estado === 'en curso') return `${inicio} - presente`;
+  return fin || inicio;
+}
+
+function formatearEtiquetaEnlace(key: string) {
+  return key.replace(/_/g, ' ');
+}
+
+function normalizarFinanciacion(financiacion: FundingItem | FundingItem[] | undefined): FundingItem[] {
+  if (!financiacion) return [];
+  return Array.isArray(financiacion) ? financiacion : [financiacion];
+}
+
+function formatearTipoFinanciacion(tipo: FundingItem['tipo']) {
+  if (tipo === 'FAPA') return 'FAPA';
+  return tipo.charAt(0).toUpperCase() + tipo.slice(1);
+}
+
+function formatearFuenteFinanciacion(fuente: FundingItem) {
+  const tipo = formatearTipoFinanciacion(fuente.tipo);
+  return fuente.entidad ? `${tipo}: ${fuente.entidad}` : tipo;
+}
+
+viajesConferencias.sort((a, b) => {
+  const diffFin = obtenerClaveFinParaOrden(b) - obtenerClaveFinParaOrden(a);
+  if (diffFin !== 0) return diffFin;
+
+  const diffInicio = obtenerClaveInicioParaOrden(b) - obtenerClaveInicioParaOrden(a);
+  if (diffInicio !== 0) return diffInicio;
+
+  return a.data.titulo.localeCompare(b.data.titulo, 'es');
+});
+---
+
+{
+  viajesConferencias.length === 0 ? (
+    <p class="textoSeccionVacio">
+      Aún no hay viajes o conferencias cargados. Puedes empezar duplicando la plantilla en{' '}
+      <code>fuente/contenido/investigacion/viajes-conferencias/_PLANTILLA.mdx</code>.
+    </p>
+  ) : (
+    <div class="listadoTarjetasMedia viajesConferencias">
+      {viajesConferencias.map(async (item) => {
+        const { Content } = await render(item);
+        const carpetaGaleria = item.data.slug || item.id.replace('.mdx', '').replace('.md', '');
+
+        const metadatos: MetaItem[] = [];
+        const secciones: SectionItem[] = [];
+        const enlaces: LinkItem[] = [];
+
+        if (item.data.tipo) {
+          metadatos.push({ etiqueta: 'Tipo', valor: item.data.tipo });
+        }
+        if (item.data.rol) {
+          metadatos.push({ etiqueta: 'Rol', valor: item.data.rol });
+        }
+        if (item.data.evento) {
+          metadatos.push({ etiqueta: 'Evento', valor: item.data.evento });
+        }
+        if (item.data.institucion) {
+          metadatos.push({ etiqueta: 'Institución', valor: item.data.institucion });
+        }
+        if (item.data.lugar) {
+          metadatos.push({ etiqueta: 'Lugar', valor: item.data.lugar });
+        }
+
+        const fuentesFinanciacion = normalizarFinanciacion(item.data.financiacion);
+        if (fuentesFinanciacion.length > 0) {
+          metadatos.push({
+            etiqueta: 'Financiación',
+            valor: fuentesFinanciacion.map(formatearFuenteFinanciacion),
+          });
+        }
+
+        if (item.data.organizadores?.length) {
+          secciones.push({
+            titulo: 'Organizadores e instituciones aliadas',
+            items: item.data.organizadores.map((organizador) => ({ titulo: organizador })),
+          });
+        }
+
+        if (item.data.participaciones?.length) {
+          secciones.push({
+            titulo: 'Participaciones',
+            items: item.data.participaciones.map((participacion) => ({
+              titulo: participacion.titulo,
+              url: participacion.enlace,
+              etiqueta: participacion.tipo,
+              meta: participacion.meta,
+            })),
+          });
+        }
+
+        if (item.data.resultados?.length) {
+          secciones.push({
+            titulo: 'Resultados o productos asociados',
+            items: item.data.resultados.map((resultado) => ({
+              titulo: resultado.titulo,
+              url: resultado.enlace,
+              etiqueta: resultado.tipo,
+              meta: resultado.meta,
+            })),
+          });
+        }
+
+        if (item.data.enlaces) {
+          for (const [key, url] of Object.entries(item.data.enlaces)) {
+            enlaces.push({
+              etiqueta: formatearEtiquetaEnlace(key),
+              url,
+            });
+          }
+        }
+
+        return (
+          <TarjetaMedia
+            id={carpetaGaleria}
+            titulo={item.data.titulo}
+            fecha={obtenerPeriodoDisplay(item)}
+            imagen={item.data.imagen_principal}
+            altImagen={item.data.titulo}
+            carpetaGaleria={item.data.galeria ? carpetaGaleria : undefined}
+            metadatos={metadatos}
+            secciones={secciones}
+            enlaces={enlaces}
+            videos={item.data.videos || []}
+          >
+            <Content />
+          </TarjetaMedia>
+        );
+      })}
+    </div>
+  )
+}
