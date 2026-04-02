@@ -6,22 +6,33 @@ interface Props {
   carpeta: string;
   limite?: number;
   variante?: 'masonry' | 'compacta' | 'tarjeta';
+  envolverComoGaleria?: boolean;
+  srcAExcluir?: string;
 }
 
-const { carpeta, limite, variante = 'masonry' } = Astro.props;
+const { carpeta, limite, variante = 'masonry', envolverComoGaleria = true, srcAExcluir } = Astro.props;
 
-const imagenes = obtenerImagenesPorCarpeta(carpeta).map((imagen) => ({
-  imagen: imagen.metadata,
-  src: imagen.src,
-  width: imagen.width,
-  height: imagen.height,
-  alt: imagen.alt,
-}));
+const imagenes = obtenerImagenesPorCarpeta(carpeta)
+  .map((imagen) => ({
+    imagen: imagen.metadata,
+    src: imagen.src,
+    width: imagen.width,
+    height: imagen.height,
+    alt: imagen.alt,
+  }))
+  .filter((img) => !srcAExcluir || img.src !== srcAExcluir);
+
+const claseContenedor = envolverComoGaleria ? `galeria galeria--${variante}` : `galeria--${variante}`;
 ---
 
 {
   imagenes.length > 0 && (
-    <div class={`galeria galeria--${variante}`} data-limite={limite} data-total={imagenes.length}>
+    <div
+      class={claseContenedor}
+      data-limite={limite}
+      data-total={imagenes.length}
+      {...(envolverComoGaleria ? { 'data-pswp-gallery': true } : {})}
+    >
       {imagenes.map((img, index) => (
         <a
           href={img.src}

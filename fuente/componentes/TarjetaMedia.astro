@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import Galeria from './Galeria.astro';
-import { obtenerPrimeraImagenDeCarpeta } from '@/utilidades/imagenes';
+import { obtenerImagenesPorCarpeta, obtenerPrimeraImagenDeCarpeta } from '@/utilidades/imagenes';
 
 interface MetaItem {
   etiqueta: string;
@@ -65,6 +65,7 @@ const {
 const EtiquetaTitulo = `h${nivelTitulo}` as 'h3' | 'h4' | 'h5' | 'h6';
 
 const primeraImagenGaleria = carpetaGaleria ? obtenerPrimeraImagenDeCarpeta(carpetaGaleria) : undefined;
+const imagenesGaleria = carpetaGaleria ? obtenerImagenesPorCarpeta(carpetaGaleria) : [];
 
 const vistaPrevia = imagen
   ? {
@@ -81,6 +82,11 @@ const vistaPrevia = imagen
         alt: altImagen || titulo,
       }
     : undefined;
+
+const srcAExcluirDeGaleria = carpetaGaleria && vistaPrevia ? vistaPrevia.src : undefined;
+const tieneMiniaturasGaleria =
+  imagenesGaleria.filter((img) => !srcAExcluirDeGaleria || img.src !== srcAExcluirDeGaleria).length > 0;
+const tieneLightboxUnificado = Boolean(vistaPrevia || carpetaGaleria);
 
 function obtenerOrientacionImagen() {
   if (!vistaPrevia) return 'sin-imagen';
@@ -120,7 +126,11 @@ function obtenerUrlEmbedInstagram(url: string): string | null {
 const orientacionImagen = obtenerOrientacionImagen();
 ---
 
-<article class={`tarjetaMedia ${vistaPrevia ? 'conImagen' : 'sinImagen'} imagen-${orientacionImagen}`} id={id}>
+<article
+  class={`tarjetaMedia ${vistaPrevia ? 'conImagen' : 'sinImagen'} imagen-${orientacionImagen}`}
+  id={id}
+  {...tieneLightboxUnificado ? { 'data-pswp-gallery': true } : {}}
+>
   <div class="columnaVisualTarjeta">
     <header class="encabezadoTarjetaLateral">
       <EtiquetaTitulo class="tituloTarjetaMedia">{titulo}</EtiquetaTitulo>
@@ -129,7 +139,7 @@ const orientacionImagen = obtenerOrientacionImagen();
 
     {
       vistaPrevia && (
-        <div class="imagenDestacada galeria">
+        <div class="imagenDestacada">
           <a
             href={vistaPrevia.src}
             data-pswp-width={vistaPrevia.width}
@@ -289,10 +299,15 @@ const orientacionImagen = obtenerOrientacionImagen();
     }
 
     {
-      carpetaGaleria && (
+      carpetaGaleria && tieneMiniaturasGaleria && (
         <section class="seccionTarjeta seccionTarjeta-galeria">
           <h5>{tituloGaleria}</h5>
-          <Galeria carpeta={carpetaGaleria} variante="tarjeta" />
+          <Galeria
+            carpeta={carpetaGaleria}
+            variante="tarjeta"
+            envolverComoGaleria={false}
+            srcAExcluir={srcAExcluirDeGaleria}
+          />
         </section>
       )
     }

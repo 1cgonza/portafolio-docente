@@ -67,8 +67,8 @@ const altImg = imagen ? imagen.alt : nombreProyecto;
 
   const galerias = new PhotoSwipeLightbox({
     pswpModule,
-    children: 'a',
-    gallery: '.galeria, .certificadosAmpliables',
+    children: 'a[data-pswp-width][data-pswp-height]',
+    gallery: '[data-pswp-gallery], .certificadosAmpliables',
   });
   galerias.init();
 </script>
