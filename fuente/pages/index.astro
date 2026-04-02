@@ -96,12 +96,17 @@ const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> 
 
   <script>
     (() => {
+      type TrackedLink = {
+        link: HTMLAnchorElement;
+        target: HTMLElement;
+      };
+
       const menu = document.querySelector('#menu');
       if (!menu) return;
 
-      const links = Array.from(menu.querySelectorAll('a[href^="#"]'));
+      const links = Array.from(menu.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
       const trackedLinks = links
-        .map((link) => {
+        .map((link): TrackedLink | null => {
           const href = link.getAttribute('href');
           if (!href || href === '#') return null;
 
@@ -111,7 +116,7 @@ const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> 
 
           return { link, target };
         })
-        .filter(Boolean);
+        .filter((item): item is TrackedLink => item !== null);
 
       if (trackedLinks.length === 0) return;
 
@@ -122,7 +127,7 @@ const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> 
         });
       };
 
-      const obtenerAncestroPrincipal = (link) => {
+      const obtenerAncestroPrincipal = (link: HTMLAnchorElement) => {
         const submenu = link.closest('.submenu');
         if (!(submenu instanceof HTMLElement)) return null;
 

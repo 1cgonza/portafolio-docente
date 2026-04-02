@@ -16,6 +16,7 @@ concurrency:
 
 env:
   BUILD_PATH: './aplicaciones/www'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -23,13 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐯 Obtener código del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: 🐜 Activar Corepack
         run: corepack enable
       - name: 🐝 Usar Node LTS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
           cache: 'yarn'
