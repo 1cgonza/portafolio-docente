@@ -166,6 +166,17 @@ viajesConferencias.sort((a, b) => {
           });
         }
 
+        if (item.data.colaboradores?.length) {
+          secciones.push({
+            titulo: 'Colaboradores',
+            items: item.data.colaboradores.map((colaborador) => ({
+              titulo: colaborador.nombre,
+              url: colaborador.enlace,
+              meta: colaborador.rol,
+            })),
+          });
+        }
+
         if (item.data.participaciones?.length) {
           secciones.push({
             titulo: 'Participaciones',

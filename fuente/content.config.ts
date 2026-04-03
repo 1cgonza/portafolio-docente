@@ -204,6 +204,15 @@ const viajesConferencias = defineCollection({
       institucion: z.string().optional(),
       lugar: z.string().optional(),
       organizadores: z.array(z.string()).optional(),
+      colaboradores: z
+        .array(
+          z.object({
+            nombre: z.string(),
+            rol: z.string().optional(),
+            enlace: z.string().optional(),
+          })
+        )
+        .optional(),
       participaciones: z
         .array(
           z.object({
