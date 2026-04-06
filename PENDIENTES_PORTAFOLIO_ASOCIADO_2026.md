@@ -172,3 +172,10 @@ Y lo que más puede subir la fuerza del caso, si alcanzas a incluirlo, es:
 - [ ] anexos externos de producción académica
 - [ ] soportes adicionales de desarrollo institucional
 - [ ] una subsección de consejerías si efectivamente has tenido ese rol
+
+<h3 id="otros">Otros</h3>
+
+- TEC 1
+- TEC 2: https://conecta.tec.mx/es/noticias/queretaro/educacion/humanidades-digitales-profesor-explica-el-arte-de-contar-con-datos
+- TEC 3
+- (2022) Invitación como guest lecturer (virtual) al curso "Experimental Animation" del "Department of Art, Film, and Visual Studies" en la Universidad de Harvard.
