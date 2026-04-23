@@ -1,6 +1,6 @@
 {
   "name": "portafolio-docente",
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.14.1",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -15,18 +15,18 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
-    "@astrojs/mdx": "^5.0.3",
-    "astro": "^6.1.3",
+    "@astrojs/mdx": "^5.0.4",
+    "astro": "^6.1.9",
     "photoswipe": "^5.4.4",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
     "@types/photoswipe": "^5.2.5",
     "@types/slug": "^5.0.9",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "sass": "^1.98.0",
+    "sass": "^1.99.0",
     "slug": "^11.0.1"
   }
 }

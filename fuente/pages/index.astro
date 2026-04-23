@@ -98,7 +98,8 @@ const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> 
       };
 
       const menu = document.querySelector('#menu');
-      if (!menu) return;
+      const menuToggle = document.querySelector<HTMLInputElement>('#menuToggle');
+      if (!menu || !menuToggle) return;
 
       const links = Array.from(menu.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
       const trackedLinks = links
@@ -168,6 +169,15 @@ const submenuPorPagina: Record<string, Array<{ href: string; titulo: string }>> 
       window.addEventListener('scroll', solicitarActualizacion, { passive: true });
       window.addEventListener('resize', solicitarActualizacion);
       window.addEventListener('load', solicitarActualizacion);
+
+      links.forEach((link) => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            menuToggle.checked = false;
+          }
+        });
+      });
+
       solicitarActualizacion();
     })();
   </script>
